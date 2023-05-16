@@ -53,6 +53,7 @@ class Course(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String, nullable=False)
     instructor_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
@@ -72,8 +73,9 @@ class Course(db.Model):
 
     enrollments = db.relationship('Enrollment', 
                                   back_populates='course',
-                                #   cascade="all, delete, delete-orphan"
+                                  cascade="all, delete, delete-orphan"
                                   )
+    enrolled_users = association_proxy('enrollments', 'user')
     
     comments = db.relationship('Comment', 
                                back_populates='course',
@@ -148,6 +150,7 @@ class Rating(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+    rate = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     
