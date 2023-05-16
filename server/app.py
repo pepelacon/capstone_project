@@ -14,7 +14,9 @@ app = Flask(
     template_folder='../client/build'
     )
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://dbproject_vbgz_user:O5SqAoFGVLqmjagflvowWdtMaqzwAqIe@dpg-chdrl867avj22bgpac30-a.ohio-postgres.render.com/dbproject_vbgz'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:9865458@localhost/capstone'
+
+# postgresql://user:9865458@localhost/capstone
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
