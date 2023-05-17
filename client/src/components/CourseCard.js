@@ -12,7 +12,6 @@ import { CardActionArea } from '@mui/material';
 export default function CourseCard (course) {
 const { id, title, category, description, picture, average_rating } = course
 const roundedRating = Math.round(average_rating * 2) / 2
-console.log(roundedRating);
     return (
         
         <Box
@@ -23,20 +22,20 @@ console.log(roundedRating);
             
                 <Card sx={{ minWidth: 150, maxWidth: 300 }}>
                     <CardActionArea>
-                    <CardMedia
-                        component="img"
-                        height="140"
-                        image={picture}
-                        alt={title}
-                    />
-                    <CardContent>
-                        <Typography gutterBottom variant="h6" component="div">
-                            {title}
-                        </Typography>
-                        <Typography component="legend">Read only</Typography>
-                        <Rating name="half-rating-read" value={roundedRating} precision={0.5} readOnly />
-                        
-                    </CardContent>
+                        <CardMedia
+                            component="img"
+                            height="100"
+                            image={picture}
+                            alt={title}
+                        />
+                        <CardContent>
+                            <Typography gutterBottom variant="h6" component="div">
+                                {title}
+                            </Typography>
+                            <Typography component="legend">Read only</Typography>
+                            <Rating name="half-rating-read" value={roundedRating} precision={0.5} readOnly />
+                            
+                        </CardContent>
                     </CardActionArea>
                 </Card>
             

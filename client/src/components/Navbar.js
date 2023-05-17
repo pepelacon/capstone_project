@@ -31,7 +31,7 @@ function handleChange(e) {
                 <input className="w-full bg-white text-gray-800 rounded-md px-4 py-2 mr-4 focus:outline-none" type="text" placeholder="Search..." onChange={handleChange} />
             </div>
             <div className="flex items-center justify-end w-1/4">
-                <Link to="#" className="text-gray-300 hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">Create course</Link>
+                <Link to="/create_course" className="text-gray-300 hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">Create course</Link>
                 <Link to="#" className="text-gray-300 hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">My Courses</Link>
                 <a href="#" className="text-gray-300 hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">{!isAuthenticated ? <SignUp /> : <SignOut />}</a>
             </div>

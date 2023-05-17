@@ -33,6 +33,30 @@ class Courses(Resource):
     def get(self):
         all_course = [course.to_dict() for course in Course.query.order_by(Course.created_at.desc()).all()]
         return make_response(all_course, 200)
+    
+    def post(self):
+        data = request.get_json()
+        try:
+            new_course = Course(
+                title=data['title'],
+                picture=data['picture'],
+                description=data['description'],
+                category=data['category'],
+                instructor_id=data['instructor_id']
+            )
+        except Exception as ex:
+            return make_response({"errors": [ex.__str__()]}, 422)
+
+        db.session.add(new_course)
+        db.session.commit()
+
+        response_dict = new_course.to_dict()
+
+        response = make_response(
+            response_dict,
+            201,
+        )
+        return response
 
 api.add_resource(Courses, '/course')
 
@@ -65,6 +89,15 @@ class Users(Resource):
             return make_response(user.to_dict(), 200)
         
 api.add_resource(Users, '/profile')
+
+class UserById(Resource):
+    def get(self, id):
+        user = User.query.filter_by(id=id).first()
+        if not user:
+            return make_response({"message" : "User not found"})
+        return make_response(user.to_dict(), 200)
+    
+api.add_resource(UserById, '/user/:id')
 
 
 if __name__ == '__main__':

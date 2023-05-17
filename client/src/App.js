@@ -1,24 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Route, Routes } from 'react-router-dom';
-// import { BrowserRouter as Router, Route } from 'react-router-dom';
 import CourseContainer from './components/CourseContainer';
 import Navbar from './components/Navbar';
 import UserProfile from './components/UserProfile';
-// import SignUp from './components/SignUp';
-// import SignOut from './components/SignOut';
+import CreateCourseForm from './components/CreateCourseForm';
+import { UserContext } from './UserContext';
+
 
 function App() {
-    const [userId, setUserId] = useState()
+    const [userId, setUserId] = useState(null)
+    const value = useMemo(() => ({ userId, setUserId }), [userId, setUserId])
 
-  return (
-    <main>
-        <Navbar />
-        <Routes>
-            <Route path="/profile" element={<UserProfile />}/>
-            <Route path="/" element={<CourseContainer />} />
-        </Routes>
-    </main>
-  );
+    console.log(userId);
+    return (
+        <main>
+            <Navbar />
+            <UserContext.Provider value={ value }>
+                <Routes>
+                    <Route path="/" element={<CourseContainer />} />
+                    <Route path="/profile" element={<UserProfile />} />
+                    <Route path="/create_course" element={<CreateCourseForm />} />
+                </Routes>
+            </UserContext.Provider>
+        </main>
+    );
 }
 
 export default App;
