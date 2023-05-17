@@ -4,7 +4,10 @@ import { UserContext } from '../UserContext'
 
 const UserProfile = () => {
     const { userId, setUserId } = useContext(UserContext) 
+    const [userInfo, setUserInfo] = useState(null)
     const { user, isAuthenticated, isLoading } = useAuth0();
+    // const [nickname, setNickname] = useState('');
+    // const [picture, setPicture] = useState('');
    
 // # create new User in DB if it existed just return existing values back
     useEffect(() => {
@@ -24,7 +27,7 @@ const UserProfile = () => {
             });
                 const data = await response.json();
                 setUserId(data.id);
-                console.log(data);
+                setUserInfo(data);
             } catch (error) {
                 console.error(error);
             }
@@ -37,16 +40,61 @@ const UserProfile = () => {
     if(isLoading){
         return <div>Loading!</div>
     }
+    
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //     const response = await fetch(`/profile/${userId}`, {
+    //         method: 'PATCH',
+    //         headers: {
+    //         'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({
+    //         nickname,
+    //         avatar: picture,
+    //         }),
+    //     });
+    //     const data = await response.json();
+    //     setUserId(data);
+    //     } catch (error) {
+    //     console.error(error);
+    //     }
+    // };
 
 
-
+// update profile   
     return (
         <>
-            {isAuthenticated ? (<h1>This is profile page</h1>) : (<h1>Not aiuthonticated</h1>)}
+          {/* {isAuthenticated && (
+            <div>
+              <h2>User Profile</h2>
+              {userId && (
+                <form onSubmit={handleSubmit}>
+                  <div>
+                    <label htmlFor="nickname">Nickname</label>
+                    <input
+                      type="text"
+                      id="nickname"
+                      value={nickname}
+                      onChange={(e) => setNickname(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="picture">Picture</label>
+                    <input
+                      type="text"
+                      id="picture"
+                      value={picture}
+                      onChange={(e) => setPicture(e.target.value)}
+                    />
+                  </div>
+                  <button type="submit">Update Profile</button>
+                </form>
+              )}
+            </div>
+          )} */}
         </>
-        
-       
-    )
+      );
 
 }
 

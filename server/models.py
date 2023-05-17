@@ -63,7 +63,7 @@ class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     category = db.Column(db.String, nullable=False)
-    picture = db.Column(db.String, nullable=True, default='https://the-tea.s3.us-east-2.amazonaws.com/user_icon.png')
+    picture = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=False)
     instructor_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 

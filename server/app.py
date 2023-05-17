@@ -90,6 +90,8 @@ class Users(Resource):
         
 api.add_resource(Users, '/profile')
 
+
+
 class UserById(Resource):
     def get(self, id):
         user = User.query.filter_by(id=id).first()

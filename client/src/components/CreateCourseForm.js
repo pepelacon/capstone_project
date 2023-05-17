@@ -1,71 +1,62 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { useFormik } from "formik"
 import * as yup from "yup"
-import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
 import { Link } from "react-router-dom"
 import { useAuth0 } from '@auth0/auth0-react'
+import { UserContext } from '../UserContext'
+
 import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
 
-function CreateCourseForm({userId, setToggle, toggle, allFriends}) {
-  const navigate = useNavigate();
-  const formSchema = yup.object().shape({
-    title: yup.string().required("Must enter a title"),
-    budget: yup.number().positive()
-  })
+function CreateCourseForm({ setToggle, toggle }) {
+    const { userId, setUserId } = useContext(UserContext) 
+    const [state, setState] = useState(true)
+    const navigate = useNavigate();
 
-  const formik = useFormik({
-    initialValues: {
-      title:'',
-      category:'',
-      picture:'',
-      description:'',
-      instructor_id: userId,
-    },
-    validationSchema: formSchema,
-    onSubmit: (values) => {
-      fetch("/course", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    const formSchema = yup.object().shape({
+        title: yup.string().required("Must enter a title"),
+        budget: yup.number().positive()
+    })
+
+    const formik = useFormik({
+        initialValues: {
+            title:'',
+            category:'',
+            picture:'',
+            description:'',
+            instructor_id: userId,
         },
-        body: JSON.stringify(values, null, 2),
-      }).then((res) => {
-        if(res.ok) {
-          res.json().then(post => {
-            setToggle(!toggle)
-            navigate(`/`)
-          })
+        validationSchema: formSchema,
+        onSubmit: (values) => {
+        fetch("/course", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values, null, 2),
+        }).then((res) => {
+            if(res.ok) {
+            res.json().then(post => {
+                console.log(post);
+                navigate(`/`)
+            })
+            }
+        })
+        },
+    })
+
+
+
+    const theme = createTheme({
+        palette: {
+        primary: {
+            main: blue[800],
         }
-      })
-    },
-  })
-
-  const [state, setState] = useState(true)
-  const { user } = useAuth0();
-  const [alignment, setAlignment] = useState('your posts');
-
-  const handleList = (newAlignment) => {
-      setAlignment(newAlignment);
-      setState(!state)
-  };
-
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: blue[800],
-      },
-    //   secondary: {
-    //     main: '#5c6f59',
-    //   },
-    //   third: {
-    //     main: '#757269',
-    //   },
-    },
-  });
+        },
+    });
 
   return (
     
@@ -114,8 +105,8 @@ function CreateCourseForm({userId, setToggle, toggle, allFriends}) {
                 </Typography>
                 <input 
                     type='text' 
-                    name='image' 
-                    value={formik.values.image} 
+                    name='picture' 
+                    value={formik.values.picture} 
                     onChange={formik.handleChange} 
                     className="w-full px-3 py-2 border border-blue-300 rounded focus:outline-none focus:border-blue-500"
                 />
