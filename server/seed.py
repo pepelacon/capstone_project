@@ -69,6 +69,18 @@ lesson_title = [
     'Final Project and Recap'
 ]
 
+category_name = [
+    'Develompment',
+    'Business',
+    'Finance',
+    'IT&Software',
+    'Design',
+    'Marketing',
+    'Health & firness',
+    'Music',
+    'Lifestyle'
+]
+
 
 with app.app_context():
 
@@ -110,7 +122,9 @@ with app.app_context():
             course = Course(
                 instructor_id = user.id,
                 title = rc(course_title),
-                description = fake.text()
+                description = fake.text(),
+                category = rc(category_name),
+                picture = rc(profile_pic)
             )
             courses.append(course)
 

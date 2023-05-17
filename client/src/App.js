@@ -1,15 +1,23 @@
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import { Route, Routes } from 'react-router-dom';
+// import { BrowserRouter as Router, Route } from 'react-router-dom';
+import CourseContainer from './components/CourseContainer';
+import Navbar from './components/Navbar';
+import UserProfile from './components/UserProfile';
+// import SignUp from './components/SignUp';
+// import SignOut from './components/SignOut';
 
 function App() {
+    const [userId, setUserId] = useState()
+
   return (
-        <div className="container mx-auto bg-gray-200 rounded-xl shadow border p-8 m-10">
-            <p className="text-3xl text-gray-700 font-bold mb-5">
-                Welcome!
-            </p>
-            <p className="text-black-700 text-lg">
-                React and Tailwind CSS in action
-            </p>
-        </div>
+    <main>
+        <Navbar />
+        <Routes>
+            <Route path="/profile" element={<UserProfile />}/>
+            <Route path="/" element={<CourseContainer />} />
+        </Routes>
+    </main>
   );
 }
 

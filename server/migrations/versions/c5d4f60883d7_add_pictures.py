@@ -1,8 +1,8 @@
-"""init
+"""add pictures
 
-Revision ID: d12d2abee630
+Revision ID: c5d4f60883d7
 Revises: 
-Create Date: 2023-05-16 08:04:08.446735
+Create Date: 2023-05-16 13:02:36.945993
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'd12d2abee630'
+revision = 'c5d4f60883d7'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,6 +32,9 @@ def upgrade():
     op.create_table('courses',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(length=100), nullable=False),
+    sa.Column('category', sa.String(), nullable=False),
+    sa.Column('picture', sa.String(), nullable=True),
+    sa.Column('description', sa.String(), nullable=False),
     sa.Column('instructor_id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
@@ -73,6 +76,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('course_id', sa.Integer(), nullable=True),
+    sa.Column('rate', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['course_id'], ['courses.id'], ),

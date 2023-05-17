@@ -10,7 +10,7 @@ class User(db.Model):
 
     __tablename__ = 'users'
 
-    serialize_rules = ('-created_at', '-updated_at', '-comments', '-enrollments')
+    serialize_rules = ('-created_at', '-updated_at', '-comments', '-enrollments',)
 
 
     id = db.Column(db.Integer, primary_key=True)
@@ -42,58 +42,58 @@ class User(db.Model):
                               cascade="all, delete, delete-orphan"
                               )
     
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'email': self.email,
+            'nickname': self.nickname,
+            'avatar': self.avatar
+        }
    
 
 class Course(db.Model):
 
     __tablename__ = 'courses'
 
-    serialize_rules = ('-created_at', '-updated_at', '-instructor', '-enrollments', '-lessons', '-comments')
+    serialize_rules = ('-created_at', '-updated_at', '-instructor', '-enrollments', '-lessons', '-comments',)
 
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
+    category = db.Column(db.String, nullable=False)
+    picture = db.Column(db.String, nullable=True, default='https://the-tea.s3.us-east-2.amazonaws.com/user_icon.png')
     description = db.Column(db.String, nullable=False)
     instructor_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    instructor = db.relationship('User', 
-                                 back_populates='courses', 
-                                 )
-    
-    lessons = db.relationship('Lesson', 
-                                back_populates='course', 
-                                cascade="all, delete, delete-orphan"
-                                )
-    
+    instructor = db.relationship('User', back_populates='courses', cascade="all, delete, delete-orphan", single_parent=True)
+
+    lessons = db.relationship('Lesson', back_populates='course', cascade="all, delete, delete-orphan")
 
     # *********** if course would be deleted, what happening with user
 
-    enrollments = db.relationship('Enrollment', 
-                                  back_populates='course',
-                                  cascade="all, delete, delete-orphan"
-                                  )
+    enrollments = db.relationship('Enrollment', back_populates='course', cascade="all, delete, delete-orphan")
     enrolled_users = association_proxy('enrollments', 'user')
+    comments = db.relationship('Comment', back_populates='course',cascade="all, delete, delete-orphan")
+    ratings = db.relationship('Rating', back_populates='course',cascade="all, delete, delete-orphan")
     
-    comments = db.relationship('Comment', 
-                               back_populates='course',
-                               cascade="all, delete, delete-orphan"
-                               )
-    
-    ratings = db.relationship('Rating', 
-                              back_populates='course',
-                              cascade="all, delete, delete-orphan"
-                              )
-    
-
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'instructor_id': self.instructor_id,
+            'title': self.title,
+            'description': self.description,
+            'picture': self.picture,
+        }
 
 class Lesson(db.Model):
 
     __tablename__ = 'lessons'
 
-    serialize_rules = ('-created_at', '-updated_at', '-course')
+    serialize_rules = ('-created_at', '-updated_at', '-course',)
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
@@ -112,7 +112,7 @@ class Enrollment(db.Model):
 
     __tablename__ = 'enrollments'
 
-    serialize_rules = ('-created_at', '-updated_at', '-course', '-user')
+    serialize_rules = ('-created_at', '-updated_at', '-course', '-user',)
 
 
     id = db.Column(db.Integer, primary_key=True)
@@ -129,7 +129,7 @@ class Comment(db.Model, SerializerMixin):
 
     __tablename__ = 'comments'
 
-    serialize_rules = ('-created_at', '-user', '-course')
+    serialize_rules = ('-created_at', '-user', '-course', '-user',)
     
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String)
@@ -145,7 +145,7 @@ class Rating(db.Model, SerializerMixin):
 
     __tablename__ = 'ratings'
 
-    serialize_rules = ('-created_at', '-updated_at', '-user', '-course')
+    serialize_rules = ('-created_at', '-updated_at', '-user', '-course',)
     
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
