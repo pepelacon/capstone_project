@@ -18,7 +18,7 @@ export default function CourseContainer () {
     let all_course = allCourses.map((course) => (<CourseCard key={course.id} {...course}/>))
     
     return (
-        <div className="mt-16 grid grid-cols-5 gap-4 justify-center">    
+        <div className="mt-16 grid grid-cols-4 gap-4 justify-center">    
             {all_course}
         </div>
     )

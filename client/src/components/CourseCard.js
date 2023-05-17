@@ -6,6 +6,8 @@ import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
+import { Link, useParams, useNavigate } from "react-router-dom"
+
 
 
 
@@ -14,32 +16,35 @@ const { id, title, category, description, picture, average_rating } = course
 const roundedRating = Math.round(average_rating * 2) / 2
     return (
         
-        <Box
-            sx={{
-                '& > legend': { mt: 2 },
-            }}
-        >
+       
+<Card className="max-w-sm rounded-lg overflow-hidden shadow-lg">
+      <img className="w-full h-56 object-cover" src={picture} alt={title} />
+      <CardContent>
+        <Typography gutterBottom variant="h6" component="div">
+          {title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {description}
+        </Typography>
+        <div className="flex items-center mt-4">
+          <div className="flex items-center">
             
-                <Card sx={{ minWidth: 150, maxWidth: 300 }}>
-                    <CardActionArea>
-                        <CardMedia
-                            component="img"
-                            height="100"
-                            image={picture}
-                            alt={title}
-                        />
-                        <CardContent>
-                            <Typography gutterBottom variant="h6" component="div">
-                                {title}
-                            </Typography>
-                            <Typography component="legend">Read only</Typography>
-                            <Rating name="half-rating-read" value={roundedRating} precision={0.5} readOnly />
-                            
-                        </CardContent>
-                    </CardActionArea>
-                </Card>
-            
-        </Box>
+            <Rating name="half-rating-read" value={roundedRating} precision={0.5} readOnly />
+          </div>
+          <div className="ml-auto">
+            <Link
+              to={`/courses/${id}`}
+              className="text-blue-500 hover:underline"
+            >
+              View Course
+            </Link>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+
+   
+  
     )
 
 }

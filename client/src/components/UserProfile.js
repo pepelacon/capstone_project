@@ -2,16 +2,11 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useState, useContext } from 'react'
 import { UserContext } from '../UserContext'
 
-
-
-
-
-
 const UserProfile = () => {
     const { userId, setUserId } = useContext(UserContext) 
     const { user, isAuthenticated, isLoading } = useAuth0();
    
-
+// # create new User in DB if it existed just return existing values back
     useEffect(() => {
         async function createUser() {
             try {
@@ -29,6 +24,7 @@ const UserProfile = () => {
             });
                 const data = await response.json();
                 setUserId(data.id);
+                console.log(data);
             } catch (error) {
                 console.error(error);
             }
@@ -41,6 +37,8 @@ const UserProfile = () => {
     if(isLoading){
         return <div>Loading!</div>
     }
+
+
 
     return (
         <>
