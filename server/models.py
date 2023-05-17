@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy import func
 
 
 db = SQLAlchemy()
@@ -79,14 +80,21 @@ class Course(db.Model):
     enrolled_users = association_proxy('enrollments', 'user')
     comments = db.relationship('Comment', back_populates='course',cascade="all, delete, delete-orphan")
     ratings = db.relationship('Rating', back_populates='course',cascade="all, delete, delete-orphan")
+
+    def calculate_average_rating(self):
+        average = db.session.query(func.avg(Rating.rate)).filter(Rating.course_id == self.id).scalar()
+        return average or 0
     
     def to_dict(self):
+        average_rating = self.calculate_average_rating()
+        avr = round(average_rating, 2)
         return {
             'id': self.id,
             'instructor_id': self.instructor_id,
             'title': self.title,
             'description': self.description,
             'picture': self.picture,
+            'average_rating': avr,
         }
 
 class Lesson(db.Model):
@@ -156,6 +164,8 @@ class Rating(db.Model, SerializerMixin):
     
     user = db.relationship('User', back_populates='ratings')
     course = db.relationship('Course', back_populates='ratings')
+
+    
 
 # class Conversation(db.Model):
     

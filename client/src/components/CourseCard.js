@@ -2,18 +2,25 @@ import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
+import Box from '@mui/material/Box';
+import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
 
 
 export default function CourseCard (course) {
-const { id, title, category, description, picture } = course
-
+const { id, title, category, description, picture, average_rating } = course
+const roundedRating = Math.round(average_rating * 2) / 2
+console.log(roundedRating);
     return (
-        // <div className="flex inline-flex justify-center">
-        <div>
-            {/* <div className="grid grid-cols-6 gap-4"> */}
+        
+        <Box
+            sx={{
+                '& > legend': { mt: 2 },
+            }}
+        >
+            
                 <Card sx={{ minWidth: 150, maxWidth: 300 }}>
                     <CardActionArea>
                     <CardMedia
@@ -26,14 +33,14 @@ const { id, title, category, description, picture } = course
                         <Typography gutterBottom variant="h6" component="div">
                             {title}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                            {description}
-                        </Typography>
+                        <Typography component="legend">Read only</Typography>
+                        <Rating name="half-rating-read" value={roundedRating} precision={0.5} readOnly />
+                        
                     </CardContent>
                     </CardActionArea>
                 </Card>
-            {/* </div>  */}
-         </div>
+            
+        </Box>
     )
 
 }
