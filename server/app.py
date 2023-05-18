@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 from flask_restful import Api, Resource
 from flask import json
 
-from models import db, Course, User
+from models import db, Course, User, Enrollment
 
 
 app = Flask(
@@ -91,7 +91,6 @@ class Users(Resource):
 api.add_resource(Users, '/profile')
 
 
-
 class UserById(Resource):
     def get(self, id):
         user = User.query.filter_by(id=id).first()
@@ -104,12 +103,45 @@ api.add_resource(UserById, '/user/<int:id>')
 class CourseById(Resource):
     def get(self, id):
         course = Course.query.filter_by(id=id).first()
-        print(course)
+        print(course.title)
         if not course:
             return make_response({"message": "Course not found"})
         return make_response(course.to_dict(), 200)
                                 
 api.add_resource(CourseById, '/course/<int:id>')
+
+class Enrollments(Resource):
+    def post(self):
+        data = request.get_json()
+        
+        course_id  = data['course_id']
+        user_id = data['user_id']
+
+        existing_enrollment = Enrollment.query.filter_by(user_id=user_id, course_id=course_id).first()
+
+        if existing_enrollment:
+            return make_response({"errors": ["User is already have this course"]}, 422)
+
+        try:
+            new_enrollment = Enrollment(
+                user_id=user_id,
+                course_id=course_id
+            )
+        except Exception as ex:
+            return make_response({"errors": [ex.__str__()]}, 422)
+
+        db.session.add(new_enrollment)
+        db.session.commit()
+
+        response_dict = new_enrollment.to_dict()
+
+        response = make_response(
+            response_dict,
+            201,
+        )
+        return response
+    
+api.add_resource(Enrollments, '/enrollments')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

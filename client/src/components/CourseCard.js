@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { Link } from "react-router-dom"
 
 
+
 export default function CourseCard (course) {
 
     const { id, title, picture, average_rating, comments, instructor } = course

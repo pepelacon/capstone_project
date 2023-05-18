@@ -2,6 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useContext } from 'react'
 import { UserContext } from '../UserContext'
 
+
 const UserProfile = () => {
     const { userId, setUserId } = useContext(UserContext) 
 

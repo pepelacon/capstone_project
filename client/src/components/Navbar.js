@@ -19,7 +19,7 @@ function handleChange(e) {
                 <div className="flex items-center flex-wrap justify-between w-full h-16">
                     <div className="flex items-center w-1/4">
                         <Link to="/" className="text-white font-bold text-xl">
-                            `SkillMentor
+                            SkillMentor
                         </Link>
                     </div>
                     <div className="flex justify-center w-1/2">

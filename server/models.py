@@ -85,12 +85,17 @@ class Course(db.Model):
         average = db.session.query(func.avg(Rating.rate)).filter(Rating.course_id == self.id).scalar()
         return average or 0
     
+    def get_enrolled_users(self):
+        enrolled_users = [enrollment.user.to_dict() for enrollment in self.enrollments]
+        return enrolled_users
+    
     def to_dict(self):
         average_rating = self.calculate_average_rating()
         avr = round(average_rating, 2)
         comments = [comment.to_dict() for comment in self.comments]
         instructor = self.instructor.to_dict()
         lessons = [lesson.to_dict() for lesson in self.lessons]
+        enrolled_users = self.get_enrolled_users()
         return {
             'id': self.id,
             'instructor_id': self.instructor_id,
@@ -101,6 +106,7 @@ class Course(db.Model):
             'comments': comments,
             'instructor': instructor,
             'lessons': lessons,
+            'enrolled_users': enrolled_users
         }
 
 class Lesson(db.Model):
@@ -147,6 +153,13 @@ class Enrollment(db.Model):
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'course_id': self.course_id
+        }
 
 class Comment(db.Model, SerializerMixin):
 
