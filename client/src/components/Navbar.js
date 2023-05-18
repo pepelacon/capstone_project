@@ -15,28 +15,28 @@ function handleChange(e) {
     return(
        
         <nav className="bg-blue-800 ">
-        <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center flex-wrap justify-between w-full h-16">
-            <div className="flex items-center w-1/4">
-                <Link to="/" className="text-white font-bold text-xl">
-                    `SkillMentor
-                </Link>
+            <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex items-center flex-wrap justify-between w-full h-16">
+                    <div className="flex items-center w-1/4">
+                        <Link to="/" className="text-white font-bold text-xl">
+                            `SkillMentor
+                        </Link>
+                    </div>
+                    <div className="flex justify-center w-1/2">
+                        <input className="w-full bg-white text-gray-800 rounded-md px-4 py-2 mr-4 focus:outline-none" type="text" placeholder="Search..." onChange={handleChange} />
+                    </div>
+                    <div className="flex items-center justify-end w-1/4">
+                    {isAuthenticated ? ( 
+                        <>
+                            <DropdownMenu />
+                        </>
+                        ) : (
+                            <a href="#" className="text-gray-300 hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium"> <SignUp /></a>
+                            
+                        )}
+                    </div>
+                </div>
             </div>
-            <div className="flex justify-center w-1/2">
-                <input className="w-full bg-white text-gray-800 rounded-md px-4 py-2 mr-4 focus:outline-none" type="text" placeholder="Search..." onChange={handleChange} />
-            </div>
-            <div className="flex items-center justify-end w-1/4">
-            {isAuthenticated ? ( 
-                <>
-                    <DropdownMenu />
-                </>
-                ) : (
-                    <a href="#" className="text-gray-300 hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium"> <SignUp /></a>
-                    
-                )}
-            </div>
-            </div>
-        </div>
         </nav>
     )
 }

@@ -99,8 +99,17 @@ class UserById(Resource):
             return make_response({"message" : "User not found"})
         return make_response(user.to_dict(), 200)
     
-api.add_resource(UserById, '/user/:id')
+api.add_resource(UserById, '/user/<int:id>')
 
+class CourseById(Resource):
+    def get(self, id):
+        course = Course.query.filter_by(id=id).first()
+        print(course)
+        if not course:
+            return make_response({"message": "Course not found"})
+        return make_response(course.to_dict(), 200)
+                                
+api.add_resource(CourseById, '/course/<int:id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

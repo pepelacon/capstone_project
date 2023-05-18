@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import CourseCard from './CourseCard'
 
 
-export default function CourseContainer () {
 
+
+export default function CourseContainer () {
     const [allCourses, setAllCourses] = useState([])
 
     const fetchCourses = async () => {

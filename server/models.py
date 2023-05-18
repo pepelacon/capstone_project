@@ -57,7 +57,7 @@ class Course(db.Model):
 
     __tablename__ = 'courses'
 
-    serialize_rules = ('-created_at', '-updated_at', '-instructor', '-enrollments', '-lessons', '-comments',)
+    serialize_rules = ('-created_at', '-updated_at', '-instructor', '-enrollments', '-lessons', '-comments', '-ratings')
 
 
     id = db.Column(db.Integer, primary_key=True)
@@ -90,6 +90,7 @@ class Course(db.Model):
         avr = round(average_rating, 2)
         comments = [comment.to_dict() for comment in self.comments]
         instructor = self.instructor.to_dict()
+        lessons = [lesson.to_dict() for lesson in self.lessons]
         return {
             'id': self.id,
             'instructor_id': self.instructor_id,
@@ -99,6 +100,7 @@ class Course(db.Model):
             'average_rating': avr,
             'comments': comments,
             'instructor': instructor,
+            'lessons': lessons,
         }
 
 class Lesson(db.Model):
@@ -118,6 +120,15 @@ class Lesson(db.Model):
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'course_id': self.course_id,
+            'done': self.done,
+        }
     
 
 class Enrollment(db.Model):

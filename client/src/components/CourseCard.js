@@ -8,9 +8,9 @@ import { Link } from "react-router-dom"
 
 export default function CourseCard (course) {
 
-    const { id, title, description, picture, average_rating, comments, instructor } = course
+    const { id, title, picture, average_rating, comments, instructor } = course
     const roundedRating = Math.round(average_rating * 2) / 2
-    console.log(comments, instructor);
+    
     return (  
         <Card className="max-w-sm rounded-lg overflow-hidden shadow-lg">
             <img className="w-full h-56 object-cover" src={picture} alt={title} />
@@ -27,11 +27,8 @@ export default function CourseCard (course) {
                     <Rating name="half-rating-read" value={roundedRating} precision={0.5} readOnly />
                 </div>
                 <div className="ml-auto">
-                    <Link
-                    to={`/detail/${id}`}
-                    className="text-blue-500 hover:underline"
-                    >
-                    View Course
+                    <Link to={`/detail/${id}`} className="text-blue-500 hover:underline" >
+                        View Course
                     </Link>
                 </div>
                 </div>

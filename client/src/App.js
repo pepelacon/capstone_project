@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import CourseContainer from './components/CourseContainer';
 import Navbar from './components/Navbar';
@@ -10,13 +10,14 @@ import { CourseDetail } from './components/CourseDetail';
 
 function App() {
     const [userId, setUserId] = useState(null)
-    const value = useMemo(() => ({ userId, setUserId }), [userId, setUserId])
+    
+    const valueUser = useMemo(() => ({ userId, setUserId }), [userId, setUserId])
+    
 
-    console.log(userId);
     return (
         <main>
             <Navbar />
-            <UserContext.Provider value={ value }>
+            <UserContext.Provider value={ valueUser }>
                 <Routes>
                     <Route path="/" element={<CourseContainer />} />
                     <Route path="/profile" element={<UserProfile />} />
