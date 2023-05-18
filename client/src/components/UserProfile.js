@@ -1,11 +1,11 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { UserContext } from '../UserContext'
 
 const UserProfile = () => {
     const { userId, setUserId } = useContext(UserContext) 
-    const [userInfo, setUserInfo] = useState(null)
-    const { user, isAuthenticated, isLoading } = useAuth0();
+
+    const { user, isLoading } = useAuth0();
     // const [nickname, setNickname] = useState('');
     // const [picture, setPicture] = useState('');
    
@@ -26,8 +26,7 @@ const UserProfile = () => {
                     })
             });
                 const data = await response.json();
-                setUserId(data.id);
-                setUserInfo(data);
+                setUserId(data);
             } catch (error) {
                 console.error(error);
             }

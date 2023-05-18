@@ -1,19 +1,16 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useState, useContext } from 'react'
+import { useContext } from 'react'
 import { useFormik } from "formik"
 import * as yup from "yup"
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { blue } from '@mui/material/colors';
-import { Link } from "react-router-dom"
-import { useAuth0 } from '@auth0/auth0-react'
+
+
 import { UserContext } from '../UserContext'
 
-import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
-function CreateCourseForm({ setToggle, toggle }) {
-    const { userId, setUserId } = useContext(UserContext) 
-    const [state, setState] = useState(true)
+function CreateCourseForm() {
+    const { userId } = useContext(UserContext) 
     const navigate = useNavigate();
 
     const formSchema = yup.object().shape({
@@ -48,15 +45,6 @@ function CreateCourseForm({ setToggle, toggle }) {
         },
     })
 
-
-
-    const theme = createTheme({
-        palette: {
-        primary: {
-            main: blue[800],
-        }
-        },
-    });
 
   return (
     

@@ -1,19 +1,16 @@
-import { Link, useParams, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import SignUp from './SignUp';
-import SignOut from './SignOut';
 import DropdownMenu from "./DropdownMenu";
 import { useAuth0 } from "@auth0/auth0-react"
 
 
 
 function NavBar() {
-    const {user, isAuthenticated} = useAuth0()  
+    const { isAuthenticated } = useAuth0()  
 
 function handleChange(e) {
     console.log(e.target.value)
 }
-
-
 
     return(
        

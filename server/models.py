@@ -88,6 +88,8 @@ class Course(db.Model):
     def to_dict(self):
         average_rating = self.calculate_average_rating()
         avr = round(average_rating, 2)
+        comments = [comment.to_dict() for comment in self.comments]
+        instructor = self.instructor.to_dict()
         return {
             'id': self.id,
             'instructor_id': self.instructor_id,
@@ -95,6 +97,8 @@ class Course(db.Model):
             'description': self.description,
             'picture': self.picture,
             'average_rating': avr,
+            'comments': comments,
+            'instructor': instructor,
         }
 
 class Lesson(db.Model):
