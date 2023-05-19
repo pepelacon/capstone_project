@@ -1,6 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useContext } from 'react'
 import { UserContext } from '../UserContext'
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -8,9 +9,11 @@ const UserProfile = () => {
     const { userId, setUserId } = useContext(UserContext) 
 
     const { user, isLoading } = useAuth0();
+    const navigate = useNavigate()
+
     // const [nickname, setNickname] = useState('');
     // const [picture, setPicture] = useState('');
-   
+   console.log(user);
 // # create new User in DB if it existed just return existing values back
     useEffect(() => {
         async function createUser() {
@@ -41,14 +44,12 @@ const UserProfile = () => {
     if(isLoading){
         return <div>Loading!</div>
     }
-
-    console.log(userId);
-
-    const formattedDate = new Date(userId.created_at).toLocaleDateString(undefined, {
+    
+    const formattedDate = userId ? new Date(userId.created_at).toLocaleDateString(undefined, {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
-    });
+    }) : '';
     
     // const handleSubmit = async (e) => {
     //     e.preventDefault();
@@ -99,6 +100,7 @@ const UserProfile = () => {
             </p>
           
           </div>
+          <button onClick={() => navigate('/settings')}>Settings</button>
         </div>)}
       </>
       )

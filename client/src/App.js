@@ -4,6 +4,7 @@ import CourseContainer from './components/CourseContainer';
 import Navbar from './components/Navbar';
 import UserProfile from './components/UserProfile';
 import CreateCourseForm from './components/CreateCourseForm';
+import Settings from './components/Settings';
 import { UserContext } from './UserContext';
 import { CourseDetail } from './components/CourseDetail';
 
@@ -23,6 +24,7 @@ function App() {
                     <Route path="/profile" element={<UserProfile />} />
                     <Route path="/create_course" element={<CreateCourseForm />} />
                     <Route path="/detail/:id" element={<CourseDetail />} />
+                    <Route path="/settings" element={<Settings />} />
                 </Routes>
             </UserContext.Provider>
         </main>

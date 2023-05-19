@@ -1,8 +1,10 @@
+import os
 from flask import Flask, request, make_response, jsonify, render_template
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
 from flask import json
+import boto3
 
 from models import db, Course, User, Enrollment
 
@@ -84,6 +86,10 @@ class Users(Resource):
             return response
         else:
             return make_response(user.to_dict(), 200)    
+
+
+    
+    
 api.add_resource(Users, '/profile')
 
 
@@ -93,6 +99,29 @@ class UserById(Resource):
         if not user:
             return make_response({"message" : "User not found"})
         return make_response(user.to_dict(), 200)
+    
+    def patch(self, id):
+        user = User.query.filter_by(id=id).first()
+
+        if not user:
+            return make_response({"message": "User not found"}, 404)
+       
+        nickname = request.form.get('nickname')
+        avatar = request.files.get('avatar')
+
+        if avatar: 
+            s3 = boto3.resource('s3', aws_access_key_id="AKIAV6MWI7KDUBJDVFUV",
+                                    aws_secret_access_key="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")
+            bucket = s3.Bucket('user-avatar-capstone')
+            file_url = f"https://{bucket.name}.s3.amazonaws.com/{avatar.filename}"
+            bucket.put_object(Key=avatar.filename, Body=avatar)
+            user.avatar = file_url
+
+        if nickname:
+            user.nickname = nickname
+        db.session.commit()
+        return make_response(user.to_dict(), 200)   
+    
 api.add_resource(UserById, '/user/<int:id>')
 
 
