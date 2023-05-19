@@ -11,7 +11,7 @@ class User(db.Model):
 
     __tablename__ = 'users'
 
-    serialize_rules = ('-created_at', '-updated_at', '-comments', '-enrollments',)
+    serialize_rules = ('-updated_at', '-comments', '-enrollments',)
 
 
     id = db.Column(db.Integer, primary_key=True)
@@ -49,7 +49,8 @@ class User(db.Model):
             'name': self.name,
             'email': self.email,
             'nickname': self.nickname,
-            'avatar': self.avatar
+            'avatar': self.avatar,
+            'created_at': self.created_at
         }
    
 
@@ -137,6 +138,26 @@ class Lesson(db.Model):
         }
     
 
+class LessonProgress(db.Model):
+    __tablename__ = 'lesson_progress'
+
+    id = db.Column(db.Integer, primary_key=True)
+    enrollment_id = db.Column(db.Integer, db.ForeignKey('enrollments.id'), nullable=False)
+    lesson_id = db.Column(db.Integer, db.ForeignKey('lessons.id'), nullable=False)
+    is_passed = db.Column(db.Boolean, default=False)
+
+    enrollment = db.relationship('Enrollment', back_populates='lesson_progress')
+    lesson = db.relationship('Lesson')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'enrollment_id': self.enrollment_id,
+            'lesson_id': self.lesson_id,
+            'is_passed': self.is_passed
+        }
+    
+
 class Enrollment(db.Model):
 
     __tablename__ = 'enrollments'
@@ -151,6 +172,8 @@ class Enrollment(db.Model):
     user = db.relationship('User', back_populates='enrollments', lazy=True)
     course = db.relationship('Course',  back_populates='enrollments', lazy=True)
 
+    lesson_progress = db.relationship('LessonProgress', cascade="all, delete, delete-orphan")
+
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
@@ -158,7 +181,8 @@ class Enrollment(db.Model):
         return {
             'id': self.id,
             'user_id': self.user_id,
-            'course_id': self.course_id
+            'course_id': self.course_id,
+            'lesson_progress': [progress.to_dict() for progress in self.lesson_progress]
         }
 
 class Comment(db.Model, SerializerMixin):

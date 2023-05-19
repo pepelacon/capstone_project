@@ -46,7 +46,6 @@ export const CourseDetail = () => {
             .then((res) => res.json())
             .then((data) => {
             setIsEnrolled(true)
-            console.log(data);
             });
     }
 

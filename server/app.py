@@ -27,8 +27,6 @@ migrate = Migrate(app, db)
 CORS(app)
 api = Api(app)
 
-
-
 class Courses(Resource):
     def get(self):
         all_course = [course.to_dict() for course in Course.query.order_by(Course.created_at.desc()).all()]
@@ -57,7 +55,6 @@ class Courses(Resource):
             201,
         )
         return response
-
 api.add_resource(Courses, '/course')
 
 
@@ -86,8 +83,7 @@ class Users(Resource):
             )
             return response
         else:
-            return make_response(user.to_dict(), 200)
-        
+            return make_response(user.to_dict(), 200)    
 api.add_resource(Users, '/profile')
 
 
@@ -97,8 +93,8 @@ class UserById(Resource):
         if not user:
             return make_response({"message" : "User not found"})
         return make_response(user.to_dict(), 200)
-    
 api.add_resource(UserById, '/user/<int:id>')
+
 
 class CourseById(Resource):
     def get(self, id):
@@ -106,8 +102,7 @@ class CourseById(Resource):
         print(course.title)
         if not course:
             return make_response({"message": "Course not found"})
-        return make_response(course.to_dict(), 200)
-                                
+        return make_response(course.to_dict(), 200)                             
 api.add_resource(CourseById, '/course/<int:id>')
 
 class Enrollments(Resource):
@@ -121,7 +116,6 @@ class Enrollments(Resource):
 
         if existing_enrollment:
             return make_response({"errors": ["User is already have this course"]}, 422)
-
         try:
             new_enrollment = Enrollment(
                 user_id=user_id,
@@ -139,8 +133,7 @@ class Enrollments(Resource):
             response_dict,
             201,
         )
-        return response
-    
+        return response  
 api.add_resource(Enrollments, '/enrollments')
 
 if __name__ == '__main__':
