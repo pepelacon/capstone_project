@@ -110,18 +110,20 @@ class UserById(Resource):
         avatar = request.files.get('avatar')
 
         if avatar: 
-            s3 = boto3.resource('s3', aws_access_key_id="AKIAV6MWI7KDUBJDVFUV",
-                                    aws_secret_access_key="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")
+            s3 = boto3.resource('s3', aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+                    aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'))
             bucket = s3.Bucket('user-avatar-capstone')
-            file_url = f"https://{bucket.name}.s3.amazonaws.com/{avatar.filename}"
+            file_url = f"https://{bucket.name}.s3.amazonaws.com/{avatar.filename}" 
             bucket.put_object(Key=avatar.filename, Body=avatar)
             user.avatar = file_url
 
         if nickname:
             user.nickname = nickname
         db.session.commit()
+
         return make_response(user.to_dict(), 200)   
     
+
 api.add_resource(UserById, '/user/<int:id>')
 
 
