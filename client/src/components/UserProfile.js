@@ -11,9 +11,7 @@ const UserProfile = () => {
     const { user, isLoading } = useAuth0();
     const navigate = useNavigate()
 
-    // const [nickname, setNickname] = useState('');
-    // const [picture, setPicture] = useState('');
-   console.log(user);
+   console.log(userId);
 // # create new User in DB if it existed just return existing values back
     useEffect(() => {
         async function createUser() {
@@ -51,26 +49,6 @@ const UserProfile = () => {
       day: 'numeric',
     }) : '';
     
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //     const response = await fetch(`/profile/${userId}`, {
-    //         method: 'PATCH',
-    //         headers: {
-    //         'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({
-    //         nickname,
-    //         avatar: picture,
-    //         }),
-    //     });
-    //     const data = await response.json();
-    //     setUserId(data);
-    //     } catch (error) {
-    //     console.error(error);
-    //     }
-    // };
-
 
 // update profile   
     return (

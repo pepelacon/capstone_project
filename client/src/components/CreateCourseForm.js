@@ -3,14 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import { useFormik } from "formik"
 import * as yup from "yup"
-
-
 import { UserContext } from '../UserContext'
+import { CourseContext } from '../CourseContext'
 
 import { Typography } from '@mui/material';
 
 function CreateCourseForm() {
     const { userId } = useContext(UserContext) 
+    const { setCourse } = useContext(CourseContext) 
+
     const navigate = useNavigate();
 
     const formSchema = yup.object().shape({
@@ -24,7 +25,7 @@ function CreateCourseForm() {
             category:'',
             picture:'',
             description:'',
-            instructor_id: userId,
+            instructor_id: userId.id,
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
@@ -37,8 +38,8 @@ function CreateCourseForm() {
         }).then((res) => {
             if(res.ok) {
             res.json().then(post => {
-                console.log(post);
-                navigate(`/`)
+                setCourse(post);
+                navigate(`/create_lesson`)
             })
             }
         })
@@ -111,11 +112,8 @@ function CreateCourseForm() {
                     className="w-full px-3 py-2 border border-blue-300 rounded focus:outline-none focus:border-blue-500"
                 />
                 <div className="flex justify-center mt-6">
-                <button
-                type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500"
-                >
-                Submit
+                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500">
+                    Submit
                 </button>
             </div>
             </form>

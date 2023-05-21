@@ -72,7 +72,7 @@ function Settings() {
 
     return (
         <div class="upload-container">
-        <img></img>
+        
         <h4 className='pi' >Change Profile Image</h4>
         <input type="file" onChange={handleFileChange} accept="image/*" />
         {file && (

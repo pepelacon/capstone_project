@@ -6,7 +6,7 @@ from flask_restful import Api, Resource
 from flask import json
 import boto3
 
-from models import db, Course, User, Enrollment
+from models import db, Course, User, Enrollment, Lesson
 
 
 app = Flask(
@@ -28,6 +28,7 @@ migrate = Migrate(app, db)
 
 CORS(app)
 api = Api(app)
+
 
 class Courses(Resource):
     def get(self):
@@ -85,11 +86,7 @@ class Users(Resource):
             )
             return response
         else:
-            return make_response(user.to_dict(), 200)    
-
-
-    
-    
+            return make_response(user.to_dict(), 200)      
 api.add_resource(Users, '/profile')
 
 
@@ -122,9 +119,32 @@ class UserById(Resource):
         db.session.commit()
 
         return make_response(user.to_dict(), 200)   
-    
-
 api.add_resource(UserById, '/user/<int:id>')
+
+class CreateLesson(Resource):    
+    def post(self):
+        data = request.form
+        
+        video = request.files['video']
+        
+        if video: 
+            s3 = boto3.resource('s3', aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+                    aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'))
+            bucket = s3.Bucket('daniel-storage-video')
+            file_url = f"https://{bucket.name}.s3.amazonaws.com/{video.filename}" 
+            bucket.upload_fileobj(Key=video.filename, Fileobj=video)
+            
+        new_lesson = Lesson(
+            title=data['title'],
+            description=data['description'],
+            course_id=data['course_id'],
+            video= file_url
+        )
+        db.session.add(new_lesson)
+        db.session.commit()
+
+        return make_response(new_lesson.to_dict(), 200)   
+api.add_resource(CreateLesson, '/create_lesson')
 
 
 class CourseById(Resource):

@@ -118,13 +118,12 @@ class Lesson(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
+    video = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String, nullable=False)
 
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
     course = db.relationship('Course', back_populates='lessons')
-    done = db.Column(db.Boolean, default=False)
     
-
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
@@ -134,7 +133,7 @@ class Lesson(db.Model):
             'title': self.title,
             'description': self.description,
             'course_id': self.course_id,
-            'done': self.done,
+            'video': self.video,
         }
     
 
