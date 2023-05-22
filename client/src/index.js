@@ -16,7 +16,7 @@ root.render(
       <Auth0Provider
           domain='dev-b5aepjlcnajdqkre.us.auth0.com'
           clientId='vaDODBqHlfuyetlOEKSUaRPmUuEdmuMr'
-          redirectUri={`${window.location.origin}`}
+          redirectUri={`${window.location.origin}/profile`}
       >
           <App />
       </Auth0Provider>

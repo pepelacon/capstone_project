@@ -11,6 +11,7 @@ import LearningPage from './components/LearningPage';
 import { UserContext } from './UserContext';
 import { CourseContext } from './CourseContext';
 import { CourseDetail } from './components/CourseDetail';
+import DropdownMenu from './components/DropdownMenu';
 
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
 
     return (
         <main>
-            <Navbar />
+            <Navbar userId={userId}/>
                 <CourseContext.Provider value={ valueCourse }>
                     <UserContext.Provider value={ valueUser }>
                         <Routes>

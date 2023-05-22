@@ -6,7 +6,7 @@ import { AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai'
 
 
 
-function NavBar() {
+function NavBar({userId}) {
     const { isAuthenticated } = useAuth0()  
 
 function handleChange(e) {
@@ -15,8 +15,8 @@ function handleChange(e) {
 
     return(
        
-        // <nav className="bg-blue-800 ">
-            <div className=" bg-blue-800 w-full mx-auto px-4 sm:px-6 lg:px-8">
+        
+            <div className=" bg-blue-700 w-full mx-auto px-4 sm:px-6 lg:px-8">
 
                 <div className="flex items-center flex-wrap justify-between w-full h-16">
 
@@ -34,7 +34,7 @@ function handleChange(e) {
                     <div className="hidden lg:flex items-center justify-end w-1/4">
                     {isAuthenticated ? ( 
                         <>
-                            <DropdownMenu />
+                            <DropdownMenu userId={userId}/>
                         </>
                         ) : (
                             <a href="#" > <SignUp /></a>
@@ -45,7 +45,7 @@ function handleChange(e) {
                 </div>
 
             </div>
-        // </nav>
+      
     )
 }
 

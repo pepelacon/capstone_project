@@ -19,9 +19,12 @@ export default function CourseContainer () {
     let all_course = allCourses.map((course) => (<CourseCard key={course.id} {...course}/>))
     
     return (
-        <div className="mt-16 grid grid-cols-4 gap-4 justify-center">    
-            {all_course}
+        <div className="flex justify-center items-center">
+            <div className="mt-16 w-4/5 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8 pt-4">    
+                {all_course}
+            </div>
         </div>
+
     )
 
 }
