@@ -3,10 +3,11 @@ from flask import Flask, request, make_response, jsonify, render_template
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
+from sqlalchemy.orm import joinedload
 from flask import json
 import boto3
 
-from models import db, Course, User, Enrollment, Lesson
+from models import db, Course, User, Enrollment, Lesson, LessonProgress
 
 
 app = Flask(
@@ -94,7 +95,7 @@ class UserById(Resource):
     def get(self, id):
         user = User.query.filter_by(id=id).first()
         if not user:
-            return make_response({"message" : "User not found"})
+            return make_response({"message" : "User not found"})      
         return make_response(user.to_dict(), 200)
     
     def patch(self, id):
@@ -146,7 +147,6 @@ class CreateLesson(Resource):
         return make_response(new_lesson.to_dict(), 200)   
 api.add_resource(CreateLesson, '/create_lesson')
 
-
 class CourseById(Resource):
     def get(self, id):
         course = Course.query.filter_by(id=id).first()
@@ -172,20 +172,57 @@ class Enrollments(Resource):
                 user_id=user_id,
                 course_id=course_id
             )
+            # lessons = Lesson.query.filter_by(course_id=course_id).options(joinedload('course')).all()
+
+            # for lesson in lessons:
+            #     lesson_progress = LessonProgress(
+            #         lesson=lesson,
+            #         is_passed=False  
+            #     )
+            #     new_enrollment.lesson_progress.append(lesson_progress)
+
+            db.session.add(new_enrollment)
+            db.session.commit()
+            response_dict = new_enrollment.to_dict()
+            response = make_response(
+                response_dict,
+                201,
+            )
+            return response  
         except Exception as ex:
             return make_response({"errors": [ex.__str__()]}, 422)
-
-        db.session.add(new_enrollment)
-        db.session.commit()
-
-        response_dict = new_enrollment.to_dict()
-
-        response = make_response(
-            response_dict,
-            201,
-        )
-        return response  
+        
 api.add_resource(Enrollments, '/enrollments')
+
+class AllUserCourses(Resource):
+    def get(self, id):
+        user = User.query.filter_by(id=id).first()
+        all_learning = []
+        for enrollment in user.enrollments:
+            course = enrollment.course.to_dict()
+            course['lesson_progress'] = [progress.to_dict() for progress in enrollment.lesson_progress]
+            all_learning.append(course)
+        return make_response(all_learning, 200)
+api.add_resource(AllUserCourses, '/my_learning/<int:id>')
+
+class LessonProgression(Resource):
+    def post(self, id):
+        data = request.get_json()
+        enrollment_id = data["enrollment_id"]
+        lessons = Lesson.query.filter_by(course_id=id).all()
+        print(enrollment_id)
+        for lesson in lessons:
+            lesson_progress = LessonProgress(
+                enrollment_id=enrollment_id,
+                lesson_id=lesson.id,
+                is_passed=False
+            )
+            db.session.add(lesson_progress)
+        
+            db.session.commit()
+        return make_response({"message": "Lesson progress added successfully"}, 200)
+api.add_resource(LessonProgression, '/lesson_progression/<int:id>')
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

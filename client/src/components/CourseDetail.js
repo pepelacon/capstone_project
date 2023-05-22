@@ -32,22 +32,38 @@ export const CourseDetail = () => {
         fetchData();
         }, [courseId]);
  
-    const handleAddCourse = () => {
-        fetch(`/enrollments`, {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-            course_id: courseInfo.id,
-            user_id: userId.id,
-            }),
-        })
-            .then((res) => res.json())
-            .then((data) => {
-            setIsEnrolled(true)
-            });
-    }
+        const handleAddCourse = () => {
+            fetch(`/enrollments`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    course_id: courseInfo.id,
+                    user_id: userId.id,
+                }),
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    setIsEnrolled(true);
+                    const enrollmentId = data.id;
+                    console.log(enrollmentId);
+                    
+                    fetch(`/lesson_progression/${courseInfo.id}`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            enrollment_id: enrollmentId,
+                        }),
+                    })
+                        .then((res) => res.json())
+                        .then((data) => {
+                            console.log(data);
+                        });
+                });
+        }
 
     return (
         <section id="features">

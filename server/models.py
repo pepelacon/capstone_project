@@ -11,7 +11,7 @@ class User(db.Model):
 
     __tablename__ = 'users'
 
-    serialize_rules = ('-updated_at', '-comments', '-enrollments',)
+    serialize_rules = ('-updated_at', '-comments', '-enrollments.user', '-enrolled_courses', '-courses.instructor',)
 
 
     id = db.Column(db.Integer, primary_key=True)
@@ -37,13 +37,14 @@ class User(db.Model):
                                   back_populates='user',
                                   cascade="all, delete, delete-orphan"
                                   )
+    enrolled_courses = association_proxy('enrollments', 'course')
     
     ratings = db.relationship('Rating', 
                               back_populates='user',
                               cascade="all, delete, delete-orphan"
                               )
-    
-    def to_dict(self):
+        
+    def to_dict(self):       
         return {
             'id': self.id,
             'name': self.name,
@@ -58,7 +59,7 @@ class Course(db.Model):
 
     __tablename__ = 'courses'
 
-    serialize_rules = ('-created_at', '-updated_at', '-instructor', '-enrollments', '-lessons', '-comments', '-ratings')
+    serialize_rules = ('-created_at', '-updated_at', '-instructor', '-enrollments', '-lessons', '-comments', '-ratings', '-enrolled_users', '-instructor.courses' )
 
 
     id = db.Column(db.Integer, primary_key=True)
@@ -162,7 +163,6 @@ class Enrollment(db.Model):
     __tablename__ = 'enrollments'
 
     serialize_rules = ('-created_at', '-updated_at', '-course', '-user',)
-
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

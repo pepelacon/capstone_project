@@ -6,6 +6,7 @@ import UserProfile from './components/UserProfile';
 import CreateCourseForm from './components/CreateCourseForm';
 import CreateLesson from './components/CreateLesson';
 import Settings from './components/Settings';
+import MyLearning from './components/MyLearning';
 import { UserContext } from './UserContext';
 import { CourseContext } from './CourseContext';
 import { CourseDetail } from './components/CourseDetail';
@@ -32,6 +33,8 @@ function App() {
                         <Route path="/create_lesson" element={<CreateLesson />} />
                         <Route path="/detail/:id" element={<CourseDetail />} />
                         <Route path="/settings" element={<Settings />} />
+                        <Route path="/my_learning" element={<MyLearning />} />
+                        
                     </Routes>
                 </UserContext.Provider>
             </CourseContext.Provider>
