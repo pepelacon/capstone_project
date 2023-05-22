@@ -11,8 +11,7 @@ const UserProfile = () => {
     const { user, isLoading } = useAuth0();
     const navigate = useNavigate()
 
-   console.log(userId);
-// # create new User in DB if it existed just return existing values back
+
     useEffect(() => {
         async function createUser() {
             try {

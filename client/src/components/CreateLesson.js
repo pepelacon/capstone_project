@@ -23,8 +23,6 @@ function CreateLesson() {
         setTitle(event.target.value)
     }
 
-    console.log(course.id);
-
     const handleVideoChange = (event) => {
         const selectedVideo = event.target.files[0];
         setVideo(selectedVideo);
