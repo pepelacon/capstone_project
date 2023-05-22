@@ -36,7 +36,7 @@ const UserProfile = () => {
         if (user && !userId) {
             createUser();
         }
-        }, [user]);
+        }, [user, userId]);
 
     if(isLoading){
         return <div>Loading!</div>

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import CourseContainer from './components/CourseContainer';
 import Navbar from './components/Navbar';
@@ -10,25 +10,23 @@ import MyLearning from './components/MyLearning';
 import LearningPage from './components/LearningPage';
 import { UserContext } from './UserContext';
 import { CourseContext } from './CourseContext';
-import { LearnContext } from './LearnContext';
 import { CourseDetail } from './components/CourseDetail';
 
 
 function App() {
     const [userId, setUserId] = useState(null)
     const [course, setCourse] = useState(null)
-    // const [learn, setLearn] = useState(null)
+    
     
     const valueUser = useMemo(() => ({ userId, setUserId }), [userId, setUserId])
     const valueCourse = useMemo(() => ({ course, setCourse }), [course, setCourse])
-    // const valueLearn = useMemo(() => ({ learn, setLearn }), [learn, setLearn])
+ 
 
     
 
     return (
         <main>
             <Navbar />
-            {/* <LearnContext.Provider value={ valueLearn }> */}
                 <CourseContext.Provider value={ valueCourse }>
                     <UserContext.Provider value={ valueUser }>
                         <Routes>
@@ -43,7 +41,6 @@ function App() {
                         </Routes>
                     </UserContext.Provider>
                 </CourseContext.Provider>
-            {/* </LearnContext.Provider> */}
         </main>
     );
 }
