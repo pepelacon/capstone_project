@@ -50,9 +50,7 @@ export const CourseDetail = () => {
                 .then((data) => {
                     setIsEnrolled(true);
                     const enrollmentId = data.id;
-                    console.log(enrollmentId);
-                    
-                    fetch(`/lesson_progression/${courseInfo.id}`, {
+                    fetch(`/lesson_progression/${userId.id}/${courseInfo.id}`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",

@@ -206,7 +206,16 @@ class AllUserCourses(Resource):
 api.add_resource(AllUserCourses, '/my_learning/<int:id>')
 
 class LessonProgression(Resource):
-    def post(self, id):
+    def get(self, userId, id):
+        enrollment = Enrollment.query.filter_by(user_id=userId, course_id=id).first()
+        if enrollment:
+            lesson_progress = enrollment.lesson_progress
+            progress_data = [progress.to_dict() for progress in lesson_progress]
+            return make_response(progress_data, 200)
+        else:
+            return make_response({"message": "Enrollment not found"}, 404)
+
+    def post(self, userId, id):
         data = request.get_json()
         enrollment_id = data["enrollment_id"]
         lessons = Lesson.query.filter_by(course_id=id).all()
@@ -221,7 +230,29 @@ class LessonProgression(Resource):
         
             db.session.commit()
         return make_response({"message": "Lesson progress added successfully"}, 200)
-api.add_resource(LessonProgression, '/lesson_progression/<int:id>')
+    
+    def patch(self, userId, id):
+        data = request.get_json()
+        lesson_id = data["lesson_id"]
+        is_passed = data["is_passed"]
+
+        enrollment = Enrollment.query.filter_by(user_id=userId, course_id=id).first()
+        if enrollment:
+            lesson_progress = LessonProgress.query.filter_by(
+                enrollment_id=enrollment.id,
+                lesson_id=lesson_id
+            ).first()
+
+            if lesson_progress:
+                lesson_progress.is_passed = is_passed
+                db.session.commit()
+
+                return make_response({"message": "Lesson progress updated successfully"}, 200)
+            else:
+                return make_response({"message": "Lesson progress not found"}, 404)
+        else:
+            return make_response({"message": "Enrollment not found"}, 404)
+api.add_resource(LessonProgression, '/lesson_progression/<int:userId>/<int:id>')
 
 
 if __name__ == '__main__':

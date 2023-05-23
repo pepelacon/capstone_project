@@ -23,7 +23,7 @@ export default function CourseCard (course) {
                 </div>
                 <div className="flex items-center mt-1">
                     <div className="flex mr-1 text-orange-700 font-bold text-sm">
-                    <p>{roundedRatingToShow}</p>
+                        <p>{roundedRatingToShow}</p>
                     </div>
                     <div className="flex ">
                         <Rating  name="half-rating-read" value={roundedRating} precision={0.5} readOnly size="small"/>

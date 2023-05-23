@@ -65,7 +65,7 @@ function CreateLesson() {
             </div>
         )}
         <h4>Title:</h4>
-        <input onChange={handleTitle} type="text" value={title} />
+        <input onChange={handleTitle} type="text" value={title} className="w-full px-3 py-2 border border-blue-300 rounded focus:outline-none focus:border-blue-500"/>
         <h4>Description:</h4>
         <textarea 
                     type='text' 

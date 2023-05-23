@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext} from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import SignOut from './SignOut';
 import { AiOutlineMenu } from 'react-icons/ai'
@@ -7,11 +7,10 @@ import Divider from '@mui/material/Divider';
 
 
 
-const DropdownMenu = ({userId}) => {
+const DropdownMenu = ({userId, role}) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
     
-    console.log(userId);
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
@@ -35,7 +34,7 @@ const DropdownMenu = ({userId}) => {
             <div>
                 <button
                     type="button"
-                    className="inline-flex justify-center w-full rounded-full text-white hover:bg-blue-600 px-3 py-2 font-bold"
+                    className="inline-flex justify-center w-full rounded-full text-white hover:bg-blue-700 px-3 py-2 font-bold"
                     onClick={toggleDropdown}
                 >
                 <AiOutlineMenu size={25} />
@@ -60,16 +59,27 @@ const DropdownMenu = ({userId}) => {
                     <Link to="/profile" className="block px-4 py-2 text-lg text-gray-700 hover:bg-gray-100" role="menuitem">
                         Account settings
                     </Link>
-                    <Link
-                        to="/create_course"
-                        className="block px-4 py-2 text-lg text-gray-700 hover:bg-gray-100"
-                        role="menuitem"
-                    >
-                        Create Course
-                    </Link>
-                    <Link to="/my_learning" className="block px-4 py-2 text-lg text-gray-700 hover:bg-gray-100" role="menuitem">
-                        My Courses
-                    </Link>
+                    { role === 'student' ?
+                        <Link to="/my_learning" className="block px-4 py-2 text-lg text-gray-700 hover:bg-gray-100" role="menuitem">
+                            My Learning
+                        </Link> : 
+                        <>
+                            <Link
+                                to="/create_course"
+                                className="block px-4 py-2 text-lg text-gray-700 hover:bg-gray-100"
+                                role="menuitem"
+                            >
+                                Create Course
+                            </Link>
+                            <Link
+                                to="/instructor_courses"
+                                className="block px-4 py-2 text-lg text-gray-700 hover:bg-gray-100"
+                                role="menuitem"
+                            >
+                                Your courses
+                            </Link>
+                        </>
+                    }
                     <Divider />
                     <a href="#"  role="menuitem">
                         <SignOut />

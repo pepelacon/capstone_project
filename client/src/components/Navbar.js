@@ -2,20 +2,25 @@ import { Link } from "react-router-dom"
 import SignUp from './SignUp';
 import DropdownMenu from "./DropdownMenu";
 import { useAuth0 } from "@auth0/auth0-react"
-import { AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai'
+import { AiOutlineSearch } from 'react-icons/ai'
+import { useState } from 'react';
+
 
 
 
 function NavBar({userId}) {
-    const { isAuthenticated } = useAuth0()  
+    const { isAuthenticated } = useAuth0()
+    const [role, setRole] = useState('student')  
 
-function handleChange(e) {
-    console.log(e.target.value)
-}
+    function handleChange(e) {
+        console.log(e.target.value)
+    }
+
+    function handleRoleChange(newRole) {
+        setRole(newRole);
+    }
 
     return(
-       
-        
             <div className=" bg-blue-900 w-full mx-auto px-4 sm:px-6 lg:px-8">
 
                 <div className="flex items-center flex-wrap justify-between w-full h-16">
@@ -32,9 +37,18 @@ function handleChange(e) {
                     </div>
 
                     <div className="hidden lg:flex items-center justify-end w-1/4">
+                        <div className="hidden lg:flex items-center bg-gray-200 rounded-full p-1 text-[14px] mr-6">
+                        <p className={`${ role === 'instructor' ? 'bg-black text-white' : 'bg-gray-200'} rounded-full p-2 cursor-pointer`} onClick={() => handleRoleChange('instructor')}>
+                            Instructor
+                        </p>
+                        <p
+                        className={`${role === 'student' ? 'bg-black text-white' : 'bg-gray-200'} rounded-full p-2 cursor-pointer`} onClick={() => handleRoleChange('student')}>
+                            Student
+                        </p>
+                    </div>
                     {isAuthenticated ? ( 
                         <>
-                            <DropdownMenu userId={userId}/>
+                            <DropdownMenu userId={userId} role={role}/>
                         </>
                         ) : (
                             <a href="#" > <SignUp /></a>
