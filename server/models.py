@@ -3,6 +3,7 @@ from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy import func
+from sqlalchemy.orm import validates
 
 
 db = SQLAlchemy()
@@ -53,7 +54,29 @@ class User(db.Model):
             'avatar': self.avatar,
             'created_at': self.created_at
         }
-   
+    @validates('title')
+    def validate_title(self, key, value):
+        if not value:
+            raise ValueError('Title is required')
+        return value
+
+    @validates('category')
+    def validate_category(self, key, value):
+        if not value:
+            raise ValueError('Category is required')
+        return value
+
+    @validates('picture')
+    def validate_picture(self, key, value):
+        if not value:
+            raise ValueError('Picture is required')
+        return value
+
+    @validates('description')
+    def validate_description(self, key, value):
+        if not value:
+            raise ValueError('Description is required')
+        return value
 
 class Course(db.Model):
 

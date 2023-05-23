@@ -16,7 +16,7 @@ function handleChange(e) {
     return(
        
         
-            <div className=" bg-blue-700 w-full mx-auto px-4 sm:px-6 lg:px-8">
+            <div className=" bg-blue-900 w-full mx-auto px-4 sm:px-6 lg:px-8">
 
                 <div className="flex items-center flex-wrap justify-between w-full h-16">
 

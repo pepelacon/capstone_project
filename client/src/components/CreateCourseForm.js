@@ -15,8 +15,11 @@ function CreateCourseForm() {
     const navigate = useNavigate();
 
     const formSchema = yup.object().shape({
-        title: yup.string().required("Must enter a title"),
-        budget: yup.number().positive()
+        title: yup.string().required("Enter a title"),
+        category: yup.string().required("Pick a category"),
+        picture: yup.string().required("Add a picture"),
+        description: yup.string().required("Enter a description"),
+        
     })
 
     const formik = useFormik({
@@ -51,45 +54,60 @@ function CreateCourseForm() {
     
     
     <div className="flex items-center justify-center h-screen" >
-      <div className="w-96 bg-blue shadow-lg rounded-lg px-8 py-6">
-        <h2 className="text-2xl font-bold mb-4">Create a new course!</h2>
+      <div className="w-102 bg-blue shadow-lg rounded-lg px-8 py-6">
+        <h2 className="text-2xl text-blue-900 font-bold mb-4">Create a new course!</h2>
         <form onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
-            <div className="mb-4">
-                <label htmlFor="title" className="block text-gray-700 font-semibold mb-2">
+            <div>
+                <Typography id='silly-forms' sx={{ fontSize: 20 }} color="secondary">
                     Title
-                </label>
+                </Typography>
+
                 <input
                     type="text"
                     id="title"
                     name="title"
                     value={formik.values.title}
                     onChange={formik.handleChange}
-                    className="w-full px-3 py-2 border border-blue-300 rounded focus:outline-none focus:border-blue-500"
-                />
+                    className={`w-full px-3 py-2 border mb-2 rounded focus:outline-none focus:border-blue-500 ${
+                        formik.errors.title && formik.touched.title ? 'border-red-500' : 'border-blue-300'
+                      }`}
+                    />
+                    {formik.errors.title && formik.touched.title && (
+                      <p className="text-red-500 text-xs mt-1">{formik.errors.title}</p>
+                    )}
+                
             </div>
                 <Typography id='silly-forms' sx={{ fontSize: 20 }} color="secondary">
                     Category
                 </Typography>
+               
+
                 <select
                     id="silly-forms"
                     name="category"
                     onChange={formik.handleChange}
                     value={formik.values.category}
-                    className="w-full px-3 py-2 border border-blue-300 rounded focus:outline-none focus:border-blue-500"
+                    className={`w-full px-3 py-2 border mb-2 rounded focus:outline-none ${
+                    formik.errors.category && formik.touched.category ? 'border-red-500' : 'border-blue-300'
+                    }`}
                 >
                     <option value="">Pick a Category</option>
-                    <option value="Develompment">Develompment</option>
+                    <option value="Development">Development</option>
                     <option value="Business">Business</option>
                     <option value="Finance">Finance</option>
                     <option value="Design">Design</option>
                     <option value="IT&Software">IT&Software</option>
                     <option value="Marketing">Marketing</option>
-                    <option value="Health & firness">Health & firness</option>
+                    <option value="Health & fitness">Health & fitness</option>
                     <option value="Music">Music</option>
                     <option value="Lifestyle">Lifestyle</option>
                 </select>
 
-                <Typography id='silly-forms' sx={{ fontSize: 20 }} color="text.secondary">
+                {formik.errors.category && formik.touched.category && (
+                <p className="text-red-500 text-xs mt-1">{formik.errors.category}</p>
+                )}
+
+                <Typography id='silly-forms' sx={{ fontSize: 20 }} color="secondary">
                     Image
                 </Typography>
                 <input 
@@ -97,8 +115,14 @@ function CreateCourseForm() {
                     name='picture' 
                     value={formik.values.picture} 
                     onChange={formik.handleChange} 
-                    className="w-full px-3 py-2 border border-blue-300 rounded focus:outline-none focus:border-blue-500"
-                />
+                    className={`w-full px-3 py-2 border mb-2 rounded focus:outline-none focus:border-blue-500 ${
+                        formik.errors.picture && formik.touched.picture ? 'border-red-500' : 'border-blue-300'
+                      }`}
+                    />
+                    {formik.errors.picture && formik.touched.picture && (
+                      <p className="text-red-500 text-xs mt-1">{formik.errors.picture}</p>
+                    )}
+                
                 <Typography id='silly-forms' sx={{ fontSize: 20 }} color="secondary">
                     Description
                 </Typography>
@@ -109,10 +133,16 @@ function CreateCourseForm() {
                     name='description' 
                     value={formik.values.description} 
                     onChange={formik.handleChange} 
-                    className="w-full px-3 py-2 border border-blue-300 rounded focus:outline-none focus:border-blue-500"
-                />
+                    className={`w-full px-3 py-2 border  rounded focus:outline-none focus:border-blue-500 ${
+                        formik.errors.description && formik.touched.description ? 'border-red-500' : 'border-blue-300'
+                      }`}
+                    />
+                    {formik.errors.picture && formik.touched.picture && (
+                      <p className="text-red-500 text-xs mt-1">{formik.errors.description}</p>
+                    )}
+            
                 <div className="flex justify-center mt-6">
-                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500">
+                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-full w-48 hover:bg-blue-500">
                     Submit
                 </button>
             </div>
