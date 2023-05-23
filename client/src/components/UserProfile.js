@@ -8,9 +8,23 @@ import { useNavigate } from 'react-router-dom';
 const UserProfile = () => {
     const { userId, setUserId } = useContext(UserContext) 
 
-    const { user, isLoading } = useAuth0();
+    const { user, isLoading, logout  } = useAuth0();
     const navigate = useNavigate()
 
+
+    const handleDelete = () =>{
+        try {fetch(`/user/${userId.id}`, {
+            method: 'DELETE',
+        })
+        .then((response) => {
+            if (response.ok){
+                logout({ logoutParams: { returnTo: window.location.origin } })
+                navigate('/')
+            }})
+        } catch (error) {
+            console.error('Error occurred during deleting user:', error);
+        }
+    }
 
     useEffect(() => {
         async function createUser() {
@@ -78,6 +92,8 @@ const UserProfile = () => {
           
           </div>
           <button onClick={() => navigate('/settings')}>Settings</button>
+          <button onClick={handleDelete}>Delete Account</button>
+
         </div>)}
       </>
       )

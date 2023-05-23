@@ -9,8 +9,11 @@ import { useEffect, useContext } from 'react'
 
 export default function YourLearningCard (course) {
     const navigate = useNavigate()
-    const { id, title, picture, instructor, lesson_progress } = course
-   
+
+    const { id, title, picture, lesson_progress } = course
+    let isDone = lesson_progress.filter((el) => el.is_passed === true)
+    let progress = Math.floor((isDone.length / lesson_progress.length) * 100);
+
     const handleLearnNow = () => {
         navigate(`/learning_process/${id}`, { state: { course } });
       };
@@ -36,7 +39,7 @@ export default function YourLearningCard (course) {
                     alt={title}
                 />
                 
-            <LinearProgress determinate value={75} />
+            <LinearProgress determinate value={progress} />
             </div>
         </div>
     )

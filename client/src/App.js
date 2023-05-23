@@ -11,7 +11,7 @@ import LearningPage from './components/LearningPage';
 import { UserContext } from './UserContext';
 import { CourseContext } from './CourseContext';
 import { CourseDetail } from './components/CourseDetail';
-import DropdownMenu from './components/DropdownMenu';
+import CoursesControl from './components/CoursesControl';
 
 
 function App() {
@@ -38,6 +38,8 @@ function App() {
                             <Route path="/detail/:id" element={<CourseDetail />} />
                             <Route path="/settings" element={<Settings />} />
                             <Route path="/my_learning" element={<MyLearning />} />
+                            <Route path="/instructor_courses" element={<CoursesControl />} />
+
                             <Route path="/learning_process/:id" element={<LearningPage />} />
                         </Routes>
                     </UserContext.Provider>

@@ -119,7 +119,14 @@ class UserById(Resource):
             user.nickname = nickname
         db.session.commit()
 
-        return make_response(user.to_dict(), 200)   
+    def delete(self, id):
+        user = User.query.filter_by(id=id).first()
+        if not user:
+            return make_response({"message" : "User not found"})
+        db.session.delete(user)
+        db.session.commit() 
+
+        return make_response({"mesage" : "User was deleted"})   
 api.add_resource(UserById, '/user/<int:id>')
 
 class CreateLesson(Resource):    
@@ -204,6 +211,17 @@ class AllUserCourses(Resource):
             all_learning.append(course)
         return make_response(all_learning, 200)
 api.add_resource(AllUserCourses, '/my_learning/<int:id>')
+
+
+class AllInstructorCourses(Resource):
+    def get(self, id):
+        courses = Course.query.filter_by(instructor_id=id).all()
+        all_courses = []
+        for course in courses:
+            course_dict = course.to_dict()
+            all_courses.append(course_dict)
+        return make_response(all_courses, 200)
+api.add_resource(AllInstructorCourses, '/my_courses/<int:id>')
 
 class LessonProgression(Resource):
     def get(self, userId, id):
