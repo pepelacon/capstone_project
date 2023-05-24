@@ -7,7 +7,7 @@ from sqlalchemy.orm import joinedload
 from flask import json
 import boto3
 
-from models import db, Course, User, Enrollment, Lesson, LessonProgress
+from models import db, Course, User, Enrollment, Lesson, LessonProgress, Comment, Rating
 
 
 app = Flask(
@@ -164,6 +164,90 @@ class CourseById(Resource):
         return make_response(course.to_dict(), 200)                             
 api.add_resource(CourseById, '/course/<int:id>')
 
+
+# $ i am working on
+
+class Ratings(Resource):
+    def post(self):
+        data = request.get_json()
+        course_id  = data['course_id']
+        user_id = data['user_id']
+        ratings = data['rating']
+
+        try:
+            new_rating = Rating(
+                user_id=user_id,
+                course_id=course_id,
+                rate=ratings
+            )
+           
+            db.session.add(new_rating)
+            db.session.commit()
+            
+            response = make_response(
+                {"errors": ["user leave comment"]},
+                201,
+            )
+            return response  
+        except Exception as ex:
+            return make_response({"errors": [ex.__str__()]}, 422)                       
+api.add_resource(Ratings, '/ratings')
+
+class RatingById(Resource):
+    def get(self, user_id, course_id):
+        existing_rating = Rating.query.filter_by(user_id=user_id, course_id=course_id).first()
+
+        if existing_rating:
+            return make_response([1], 200)
+        return make_response({"message":"rating for this course does not exist"}, 200)
+api.add_resource(RatingById, '/ratings/<int:user_id>/<int:course_id>')
+
+class CommentsById(Resource):
+    def get(self, user_id, course_id):
+        existing_comment = Comment.query.filter_by(user_id=user_id, course_id=course_id).first()
+
+        if existing_comment:
+            return make_response([1], 200)
+        return make_response({"message":"comment for this course does not exist"}, 200)
+api.add_resource(CommentsById, '/comments/<int:user_id>/<int:course_id>')
+
+
+class Comments(Resource):
+    def post(self):
+        data = request.get_json()
+        course_id  = data['course_id']
+        user_id = data['user_id']
+        comment = data['content']
+
+        try:
+            new_comment = Comment(
+                user_id=user_id,
+                course_id=course_id,
+                content=comment
+            )
+           
+            db.session.add(new_comment)
+            db.session.commit()
+            
+            response = make_response(
+                {"errors": ["user leave comment"]},
+                201,
+            )
+            return response  
+        except Exception as ex:
+            return make_response({"errors": [ex.__str__()]}, 422)                       
+api.add_resource(Comments, '/comments')
+
+# class Ratings(Resource):
+#     def post(self, id):
+#         course = Course.query.filter_by(id=id).first()
+#         print(course.title)
+#         if not course:
+#             return make_response({"message": "Course not found"})
+#         return make_response(course.to_dict(), 200)                             
+# api.add_resource(CourseById, '/course/<int:id>')
+
+
 class Enrollments(Resource):
     def post(self):
         data = request.get_json()
@@ -180,15 +264,7 @@ class Enrollments(Resource):
                 user_id=user_id,
                 course_id=course_id
             )
-            # lessons = Lesson.query.filter_by(course_id=course_id).options(joinedload('course')).all()
-
-            # for lesson in lessons:
-            #     lesson_progress = LessonProgress(
-            #         lesson=lesson,
-            #         is_passed=False  
-            #     )
-            #     new_enrollment.lesson_progress.append(lesson_progress)
-
+           
             db.session.add(new_enrollment)
             db.session.commit()
             response_dict = new_enrollment.to_dict()
@@ -199,8 +275,9 @@ class Enrollments(Resource):
             return response  
         except Exception as ex:
             return make_response({"errors": [ex.__str__()]}, 422)
-        
 api.add_resource(Enrollments, '/enrollments')
+
+
 
 class AllUserCourses(Resource):
     def get(self, id):
