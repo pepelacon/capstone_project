@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../UserContext'
 
 
@@ -6,9 +7,10 @@ import { UserContext } from '../UserContext'
 function Settings() {
     const { userId, setUserId} = useContext(UserContext) 
     const [file, setFile] = useState(null);
-    const [nickname, setNickname] = useState(userId.nickname);
-    const [profilePic, setProfilePic] = useState(userId.avatar);
-
+    const [nickname, setNickname] = useState(userId?.nickname);
+    const [profilePic, setProfilePic] = useState(userId?.avatar);
+    const navigate = useNavigate()
+  
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
         setFile(selectedFile);
@@ -33,6 +35,7 @@ function Settings() {
           });
           if (response.ok) {
             const data = await response.json();
+            console.log(data);
             setUserId(data);
           } else {
             console.log('Error occurred during image upload:', response.status);
@@ -49,7 +52,8 @@ function Settings() {
     }
 
     return (
-        <div className="upload-container">  
+        <div className="upload-container">
+        
         <h4 className='pi' >Change Profile Image</h4>
         <input type="file" onChange={handleFileChange} accept="image/*" />
         {file && (

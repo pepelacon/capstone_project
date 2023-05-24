@@ -23,7 +23,7 @@ function App() {
     const valueCourse = useMemo(() => ({ course, setCourse }), [course, setCourse])
  
 
-    
+    console.log(userId);
 
     return (
         <main>
@@ -39,7 +39,6 @@ function App() {
                             <Route path="/settings" element={<Settings />} />
                             <Route path="/my_learning" element={<MyLearning />} />
                             <Route path="/instructor_courses" element={<CoursesControl />} />
-
                             <Route path="/learning_process/:id" element={<LearningPage />} />
                         </Routes>
                     </UserContext.Provider>

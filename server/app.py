@@ -118,6 +118,7 @@ class UserById(Resource):
         if nickname:
             user.nickname = nickname
         db.session.commit()
+        return make_response(user.to_dict(), 200)
 
     def delete(self, id):
         user = User.query.filter_by(id=id).first()
