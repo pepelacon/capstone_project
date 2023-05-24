@@ -1,12 +1,11 @@
 import React from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
 import { useContext, useState } from 'react'
 import { useFormik } from "formik"
 import * as yup from "yup"
 import { UserContext } from '../UserContext'
 import { CourseContext } from '../CourseContext'
 
-import { Typography } from '@mui/material';
+
 
 function CreateLesson() {
     const { userId } = useContext(UserContext) 
@@ -53,13 +52,13 @@ function CreateLesson() {
       };
 
   return (
-    <div class="upload-container">
-        
-        <h4 className='pi' >Change Profile Image</h4>
+    <div className="flex items-center justify-center h-screen" >
+      <div className="w-102 bg-blue shadow-lg rounded-lg px-8 py-6">
+        <h2 className="text-2xl text-blue-900 font-bold mb-4">Create a new lesson!</h2>
         <input type="file" onChange={handleVideoChange} accept="video/*" />
         {video && (
-            <div>
-                <video className='preview-video' controls>
+            <div className='max-w-[480px] max-h-[320]'>
+                <video controls>
                 <source src={URL.createObjectURL(video)} type={video.type} />
                 </video>
             </div>
@@ -80,7 +79,10 @@ function CreateLesson() {
         <button onClick={handleVideoUpload}>Upload</button>
         
         </div>
+        </div>
+       
   )
 }
   
 export default CreateLesson
+

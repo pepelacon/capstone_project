@@ -4,9 +4,9 @@ import CourseCard from './CourseCard'
 
 
 
-export default function CourseContainer () {
+export default function CourseContainer ({query}) {
     const [allCourses, setAllCourses] = useState([])
-
+    console.log(allCourses);
     const fetchCourses = async () => {
         const response = await fetch(`/course`);
         const data = await response.json();
@@ -15,8 +15,9 @@ export default function CourseContainer () {
     useEffect(()=>{
         fetchCourses();
     },[]);
-
-    let all_course = allCourses.map((course) => (<CourseCard key={course.id} {...course}/>))
+    console.log(query);
+    let all_course = allCourses.filter((course) => course.title.toLowerCase().includes(query)
+    ).map((course) => (<CourseCard key={course.id} {...course}/>))
     
     return (
         <div className="flex justify-center items-center">

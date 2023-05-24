@@ -18,8 +18,7 @@ function CreateCourseForm() {
         title: yup.string().required("Enter a title"),
         category: yup.string().required("Pick a category"),
         picture: yup.string().required("Add a picture"),
-        description: yup.string().required("Enter a description"),
-        
+        description: yup.string().required("Enter a description"),  
     })
 
     const formik = useFormik({
@@ -145,7 +144,7 @@ function CreateCourseForm() {
                 <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-full w-48 hover:bg-blue-500">
                     Submit
                 </button>
-            </div>
+                </div>
             </form>
         </div>
         </div>

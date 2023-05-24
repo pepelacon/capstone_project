@@ -16,6 +16,8 @@ import CoursesControl from "./components/CoursesControl";
 function App() {
   const [userId, setUserId] = useState(null);
   const [course, setCourse] = useState(null);
+  const [query, setQuery] = useState('')
+
 
   const valueUser = useMemo(() => ({ userId, setUserId }), [userId, setUserId]);
   const valueCourse = useMemo(
@@ -27,11 +29,11 @@ function App() {
 
   return (
     <main>
-      <Navbar userId={userId} />
+      <Navbar userId={userId} setQuery={setQuery}/>
       <CourseContext.Provider value={valueCourse}>
         <UserContext.Provider value={valueUser}>
           <Routes>
-            <Route path="/" element={<CourseContainer />} />
+            <Route path="/" element={<CourseContainer query={query}/>} />
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/create_course" element={<CreateCourseForm />} />
             <Route path="/create_lesson" element={<CreateLesson />} />

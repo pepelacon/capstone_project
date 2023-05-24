@@ -14,7 +14,6 @@ export const CourseDetail = () => {
     let { id: courseId } = useParams()
 
 
-    console.log(courseInfo);
     const navigate = useNavigate()
     useEffect(() => {
         const fetchData = async () => {

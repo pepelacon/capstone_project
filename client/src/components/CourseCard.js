@@ -10,7 +10,8 @@ export default function CourseCard (course) {
     const { id, title, picture, average_rating, comments, instructor } = course
     const roundedRating = Math.round(average_rating * 2) / 2
     const roundedRatingToShow = (Math.round(average_rating * 10) / 10);
-    console.log(course);
+
+    
     return (  
         <div className="max-w-sm rounded-sm overflow-hidden" onClick={() => navigate(`/detail/${id}`)}>
             <img className="w-full h-36 object-cover" src={picture} alt={title} />

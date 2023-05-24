@@ -5,8 +5,8 @@ import { UserContext } from "../UserContext";
 function Settings() {
   const { userId, setUserId } = useContext(UserContext);
   const [file, setFile] = useState(null);
-  const [nickname, setNickname] = useState(userId?.nickname);
-  const [profilePic, setProfilePic] = useState(userId?.avatar);
+  const [nickname, setNickname] = useState(userId.nickname);
+  const [profilePic, setProfilePic] = useState(userId.avatar);
   const navigate = useNavigate();
 
   const handleFileChange = (event) => {

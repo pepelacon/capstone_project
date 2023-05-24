@@ -2,20 +2,28 @@ import { Link } from "react-router-dom";
 import SignUp from "./SignUp";
 import DropdownMenu from "./DropdownMenu";
 import { useAuth0 } from "@auth0/auth0-react";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineCloseCircle } from "react-icons/ai";
+import { RxCross2 } from "react-icons/rx";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function NavBar({ userId }) {
+function NavBar({ userId, setQuery }) {
   const { isAuthenticated } = useAuth0();
   const [role, setRole] = useState("student");
+  const [inputValue, setInputValue] = useState('')
   const navigate = useNavigate();
 
-  console.log(userId);
+  
   function handleChange(e) {
-    console.log(e.target.value);
+    setInputValue(e.target.value);
+    setQuery(e.target.value);
   }
 
+  function handleErase() {
+    setQuery('')
+    setInputValue('')
+  }
+  
   function handleRoleChange(newRole) {
     setRole(newRole);
     newRole === "student" ? navigate("/") : navigate("/instructor_courses");
@@ -47,8 +55,10 @@ function NavBar({ userId }) {
             className="bg-transparent p-2 w-full focus:outline-none"
             type="text"
             placeholder="Search..."
+            value={inputValue}
             onChange={handleChange}
           />
+          <AiOutlineCloseCircle size={30} onClick={handleErase}/>
         </div>
         <div className="hidden lg:flex items-center justify-end w-1/4">
           <div className="hidden lg:flex items-center bg-gray-200 rounded-full p-1 text-[14px] mr-6">
