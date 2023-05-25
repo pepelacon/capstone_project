@@ -5,13 +5,13 @@ import { useFormik } from "formik"
 import * as yup from "yup"
 import { UserContext } from '../UserContext'
 import { CourseContext } from '../CourseContext'
+import { useDropzone } from 'react-dropzone';
 
 import { Typography } from '@mui/material';
 
 function CreateCourseForm() {
     const { userId } = useContext(UserContext) 
     const { setCourse } = useContext(CourseContext) 
-
     const navigate = useNavigate();
 
     const formSchema = yup.object().shape({
@@ -31,12 +31,16 @@ function CreateCourseForm() {
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
+        
         fetch("/course", {
             method: "POST",
             headers: {
             "Content-Type": "application/json",
             },
-            body: JSON.stringify(values, null, 2),
+            body: JSON.stringify({
+                ...values,
+                picture: values.picture,
+              }),
         }).then((res) => {
             if(res.ok) {
             res.json().then(post => {
@@ -48,10 +52,20 @@ function CreateCourseForm() {
         },
     })
 
+    const handlePictureDrop = (acceptedFiles) => {
+        const file = acceptedFiles[0];
+        const fileUrl = URL.createObjectURL(file);
+        formik.setFieldValue('picture', fileUrl);
+      };
+    
+      const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop: handlePictureDrop,
+        accept: 'image/*',
+        multiple: false,
+      });
 
-  return (
-    
-    
+
+  return ( 
     <div className="flex items-center justify-center h-screen" >
       <div className="w-102 bg-blue shadow-lg rounded-lg px-8 py-6">
         <h2 className="text-2xl text-blue-900 font-bold mb-4">Create a new course!</h2>
@@ -106,21 +120,29 @@ function CreateCourseForm() {
                 <p className="text-red-500 text-xs mt-1">{formik.errors.category}</p>
                 )}
 
-                <Typography id='silly-forms' sx={{ fontSize: 20 }} color="secondary">
+                <Typography id="silly-forms" sx={{ fontSize: 20 }} color="secondary">
                     Image
                 </Typography>
-                <input 
-                    type='text' 
-                    name='picture' 
-                    value={formik.values.picture} 
-                    onChange={formik.handleChange} 
-                    className={`w-full px-3 py-2 border mb-2 rounded focus:outline-none focus:border-blue-500 ${
-                        formik.errors.picture && formik.touched.picture ? 'border-red-500' : 'border-blue-300'
-                      }`}
-                    />
-                    {formik.errors.picture && formik.touched.picture && (
-                      <p className="text-red-500 text-xs mt-1">{formik.errors.picture}</p>
-                    )}
+
+                <div
+                {...getRootProps()}
+                className={`w-full px-3 py-2 border mb-2 flex justify-center rounded focus:outline-none focus:border-blue-500 ${
+                    formik.errors.picture && formik.touched.picture ? 'border-red-500' : 'border-blue-300'
+                    } ${isDragActive ? 'border-blue-500' : ''}`}
+                >
+                <input {...getInputProps()} />
+                {formik.values.picture ? (
+                    <img src={formik.values.picture} alt="Dropped Image" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+                ) : isDragActive ? (
+                    <p>Drop the file here...</p>
+                ) : (
+                    <p>Drag and drop an image here, or click to select an image</p>
+                )}
+                </div>
+
+                {formik.errors.picture && formik.touched.picture && (
+                    <p className="text-red-500 text-xs mt-1">{formik.errors.picture}</p>
+                )}
                 
                 <Typography id='silly-forms' sx={{ fontSize: 20 }} color="secondary">
                     Description
