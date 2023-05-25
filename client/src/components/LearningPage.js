@@ -54,7 +54,7 @@ export default function LearningPage () {
 
     const [selectedLesson, setSelectedLesson] = useState(course.lessons[0]);
     
-  
+    console.log(selectedLesson.video);
  
     const handleLessonClick = (lesson) => {
       setSelectedLesson(lesson);
@@ -96,14 +96,15 @@ export default function LearningPage () {
         ))}
         
         </ul>
+        
     </div>
 
         <div className="w-3/4 flex flex-col justify-center items-center mt-4">
           {selectedLesson ? (
             <>
               <h2 className="text-xl font-bold">{selectedLesson.title}</h2>
-              <div className='w-[1024px] h-[520px] flex justify-center items-center '>
-                <video key={selectedLesson.id} controls >
+              <div className='h-[520px] flex justify-center items-center '>
+                <video key={selectedLesson.id} controls style={{ width: '100%', height: '100%' }}>
                   <source src={selectedLesson.video} type="video/mp4" />
                   Your browser does not support the video tag.
               </video>
