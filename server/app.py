@@ -37,28 +37,36 @@ class Courses(Resource):
         return make_response(all_course, 200)
     
     def post(self):
-        data = request.get_json()
+        data = request.form
+        picture = request.files.get("picture")
         try:
+            s3 = boto3.resource('s3', aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+                    aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'))
+            bucket = s3.Bucket('user-avatar-capstone')
+            file_url = f"https://{bucket.name}.s3.amazonaws.com/{picture.filename}" 
+            bucket.put_object(Key=picture.filename, Body=picture)
+
+            
             new_course = Course(
                 title=data['title'],
-                picture=data['picture'],
+                picture=file_url,
                 description=data['description'],
                 category=data['category'],
                 instructor_id=data['instructor_id']
             )
+            db.session.add(new_course)
+            db.session.commit()
+
+            response_dict = new_course.to_dict()
+
+            response = make_response(
+                response_dict,
+                201,
+            )
+            return response
         except Exception as ex:
             return make_response({"errors": [ex.__str__()]}, 422)
 
-        db.session.add(new_course)
-        db.session.commit()
-
-        response_dict = new_course.to_dict()
-
-        response = make_response(
-            response_dict,
-            201,
-        )
-        return response
 api.add_resource(Courses, '/course')
 
 
