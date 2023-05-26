@@ -307,10 +307,8 @@ with app.app_context():
 
     print("Creating randomly assigned comments")
     comments = []
-    for i in range(10):
-        course = courses.pop(1)
-        index = randint(3, 6)
-        for i in range(index):
+    for course in courses:        
+        for i in range(randint(3, 6)):
             comment = Comment(
                 user_id=rc(users).id, 
                 course_id=course.id,

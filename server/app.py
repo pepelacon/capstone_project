@@ -7,7 +7,7 @@ from sqlalchemy.orm import joinedload
 from flask import json
 import boto3
 
-from models import db, Course, User, Enrollment, Lesson, LessonProgress, Comment, Rating
+from models import db, Course, User, Enrollment, Lesson, LessonProgress, Comment, Rating, Message
 
 
 app = Flask(
@@ -158,7 +158,6 @@ api.add_resource(CreateLesson, '/create_lesson')
 class CourseById(Resource):
     def get(self, id):
         course = Course.query.filter_by(id=id).first()
-        print(course.title)
         if not course:
             return make_response({"message": "Course not found"})
         return make_response(course.to_dict(), 200)                             
@@ -238,16 +237,6 @@ class Comments(Resource):
             return make_response({"errors": [ex.__str__()]}, 422)                       
 api.add_resource(Comments, '/comments')
 
-# class Ratings(Resource):
-#     def post(self, id):
-#         course = Course.query.filter_by(id=id).first()
-#         print(course.title)
-#         if not course:
-#             return make_response({"message": "Course not found"})
-#         return make_response(course.to_dict(), 200)                             
-# api.add_resource(CourseById, '/course/<int:id>')
-
-
 class Enrollments(Resource):
     def post(self):
         data = request.get_json()
@@ -276,8 +265,6 @@ class Enrollments(Resource):
         except Exception as ex:
             return make_response({"errors": [ex.__str__()]}, 422)
 api.add_resource(Enrollments, '/enrollments')
-
-
 
 class AllUserCourses(Resource):
     def get(self, id):
@@ -349,6 +336,49 @@ class LessonProgression(Resource):
         else:
             return make_response({"message": "Enrollment not found"}, 404)
 api.add_resource(LessonProgression, '/lesson_progression/<int:userId>/<int:id>')
+
+
+class Messages(Resource):
+    def get(self, id):
+        lesson = Lesson.query.filter_by(id=id).first()
+    
+        if not lesson:
+            return make_response({"message": "Lesson not found"}, 404)
+        
+        messages = lesson.messages
+        
+        message_data = []
+        for message in messages:
+            message_data.append({
+                'sender_id': message.sender_id,
+                'lesson_id': message.lesson_id,
+                'content': message.content,
+                'created_at': message.created_at,
+                'id': message.id
+            })
+        
+        return make_response(message_data, 200)
+    
+    def post(self, id):
+        data = request.get_json()
+        lesson = Lesson.query.filter_by(id=id).first()
+
+        if not lesson:
+            return make_response({"message": "Lesson not found"}, 404)
+        
+        try:
+            new_message = Message(
+                sender_id=data['sender_id'],
+                lesson_id=id,
+                content=data['content']
+            )
+            db.session.add(new_message)
+            db.session.commit()
+            
+            return make_response(new_message.to_dict(), 201)
+        except Exception as ex:
+            return make_response({"errors": [ex.__str__()]}, 422)
+api.add_resource(Messages, '/lesson/<int:id>/messages')
 
 
 if __name__ == '__main__':

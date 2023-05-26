@@ -3,12 +3,16 @@ import LinearProgress from "@mui/joy/LinearProgress";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { UserContext } from '../UserContext'
+import { CourseContext } from '../CourseContext'
+
 import axios from 'axios';
 
 
 export default function YourLearningCard(course) {
   const navigate = useNavigate();
   const { userId, setUserId } = useContext(UserContext) 
+  const { setCourse } = useContext(CourseContext) 
+
   const [isOpen, setIsOpen] = useState(false);
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(0);
@@ -28,8 +32,7 @@ export default function YourLearningCard(course) {
     const checkExistingComment = async () => {
       try {
         const response = await axios.get(`/comments/${userId.id}/${course.id}`);
-        if (response.data.length > 0,
-          console.log(response.data.length )) {
+        if (response.data.length > 0) {
           setIsCommented(true);
         }
       } catch (error) {

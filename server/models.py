@@ -11,9 +11,7 @@ db = SQLAlchemy()
 class User(db.Model):
 
     __tablename__ = 'users'
-
-    serialize_rules = ('-updated_at', '-comments', '-enrollments.user', '-enrolled_courses', '-courses.instructor',)
-
+    serialize_rules = ('-updated_at', '-comments', '-enrollments.user', '-enrolled_courses', '-courses.instructor', '-sent_messages')
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -24,26 +22,12 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    comments = db.relationship('Comment', 
-                               back_populates='user',
-                               cascade="all, delete, delete-orphan"
-                               )
-    
-    courses = db.relationship('Course', 
-                              back_populates='instructor',
-                              cascade="all, delete, delete-orphan"
-                              )
-    
-    enrollments = db.relationship('Enrollment', 
-                                  back_populates='user',
-                                  cascade="all, delete, delete-orphan"
-                                  )
+    messages = db.relationship('Message', back_populates='sender', lazy=True)
+    comments = db.relationship('Comment', back_populates='user', cascade="all, delete, delete-orphan")
+    courses = db.relationship('Course', back_populates='instructor', cascade="all, delete, delete-orphan")
+    enrollments = db.relationship('Enrollment', back_populates='user', cascade="all, delete, delete-orphan")
     enrolled_courses = association_proxy('enrollments', 'course')
-    
-    ratings = db.relationship('Rating', 
-                              back_populates='user',
-                              cascade="all, delete, delete-orphan"
-                              )
+    ratings = db.relationship('Rating', back_populates='user', cascade="all, delete, delete-orphan")
         
     def to_dict(self):       
         return {
@@ -81,9 +65,7 @@ class User(db.Model):
 class Course(db.Model):
 
     __tablename__ = 'courses'
-
     serialize_rules = ('-created_at', '-updated_at', '-instructor', '-enrollments', '-lessons', '-comments', '-ratings', '-enrolled_users', '-instructor.courses' )
-
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
@@ -96,7 +78,6 @@ class Course(db.Model):
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     instructor = db.relationship('User', back_populates='courses', cascade="all, delete, delete-orphan", single_parent=True)
-
     lessons = db.relationship('Lesson', back_populates='course', cascade="all, delete, delete-orphan")
 
     # *********** if course would be deleted, what happening with user
@@ -137,8 +118,7 @@ class Course(db.Model):
 class Lesson(db.Model):
 
     __tablename__ = 'lessons'
-
-    serialize_rules = ('-created_at', '-updated_at', '-course',)
+    serialize_rules = ('-created_at', '-updated_at', '-course', '-messages')
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
@@ -146,7 +126,9 @@ class Lesson(db.Model):
     description = db.Column(db.String, nullable=False)
 
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+
     course = db.relationship('Course', back_populates='lessons')
+    messages = db.relationship('Message', back_populates='lesson', cascade="all, delete, delete-orphan")
     
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
@@ -162,6 +144,7 @@ class Lesson(db.Model):
     
 
 class LessonProgress(db.Model):
+
     __tablename__ = 'lesson_progress'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -184,7 +167,6 @@ class LessonProgress(db.Model):
 class Enrollment(db.Model):
 
     __tablename__ = 'enrollments'
-
     serialize_rules = ('-created_at', '-updated_at', '-course', '-user',)
 
     id = db.Column(db.Integer, primary_key=True)
@@ -193,7 +175,6 @@ class Enrollment(db.Model):
 
     user = db.relationship('User', back_populates='enrollments', lazy=True)
     course = db.relationship('Course',  back_populates='enrollments', lazy=True)
-
     lesson_progress = db.relationship('LessonProgress', cascade="all, delete, delete-orphan")
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
@@ -210,7 +191,6 @@ class Enrollment(db.Model):
 class Comment(db.Model, SerializerMixin):
 
     __tablename__ = 'comments'
-
     serialize_rules = ('-created_at', '-user', '-course', '-user',)
     
     id = db.Column(db.Integer, primary_key=True)
@@ -226,7 +206,6 @@ class Comment(db.Model, SerializerMixin):
 class Rating(db.Model, SerializerMixin):
 
     __tablename__ = 'ratings'
-
     serialize_rules = ('-created_at', '-updated_at', '-user', '-course',)
     
     id = db.Column(db.Integer, primary_key=True)
@@ -240,13 +219,26 @@ class Rating(db.Model, SerializerMixin):
     course = db.relationship('Course', back_populates='ratings')
 
     
+class Message(db.Model):
+    __tablename__ = 'messages'
 
-# class Conversation(db.Model):
-    
-#     __tablename__ = 'conversations'
+    serialize_rules = ('-created_at', '-sender', '-recipient', '-lesson')
 
-#     id = db.Column(db.Integer, primary_key=True)
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-#     user = db.relationship('User', backref=db.backref('conversations', lazy=True))
-#     lesson_id = db.Column(db.Integer, db.ForeignKey('lessons.id'), nullable=False)
-#     content = db.Column(db.Text, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+   
+    lesson_id = db.Column(db.Integer, db.ForeignKey('lessons.id'), nullable=False)
+    content = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+
+    sender = db.relationship('User', back_populates='messages')
+    lesson = db.relationship('Lesson', back_populates='messages')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'sender_id': self.sender_id,
+            'lesson_id': self.lesson_id,
+            'content': self.content,
+            'created_at': self.created_at
+        }

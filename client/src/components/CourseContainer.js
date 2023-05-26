@@ -15,7 +15,7 @@ export default function CourseContainer ({query}) {
     useEffect(()=>{
         fetchCourses();
     },[]);
-    console.log(query);
+    
     let all_course = allCourses.filter((course) => course.title.toLowerCase().includes(query)
     ).map((course) => (<CourseCard key={course.id} {...course}/>))
     
