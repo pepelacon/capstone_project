@@ -52,15 +52,14 @@ export default function BestContainer() {
   };
 
   return (
-    // <div className="flex justify-center items-center">
-      <div className="mt-32 w-4/5  ">
+      <div className="w-4/5  ">
+        <h2 className='text-black font-bold md:text-xl p-4'>Best offers</h2>
         <Carousel 
             responsive={responsive}
             infinite={true}
         >
-         {best_courses}
+            {best_courses}
         </Carousel>
       </div>
-//  </div>
   );
 }

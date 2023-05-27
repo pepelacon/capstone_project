@@ -11,7 +11,7 @@ export default function CourseCard (course) {
     const roundedRating = Math.round(average_rating * 2) / 2
     const roundedRatingToShow = (Math.round(average_rating * 10) / 10);
 
-    console.log(course);
+
     return (  
         <div className="max-w-sm rounded-sm overflow-hidden" onClick={() => navigate(`/detail/${id}`)}>
             <img className="w-full h-36 object-cover" src={picture} alt={title} />
@@ -19,7 +19,7 @@ export default function CourseCard (course) {
                 <div className="line-clamp-1 font-bold text-sm ">
                     {title}
                 </div>
-                <div className="text-gray-500 text-sm mt-1 mb-2">
+                <div className="text-gray-500 text-sm mb-2">
                     {instructor.name}
                 </div>
                 <div className="flex items-center mt-1">

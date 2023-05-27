@@ -27,6 +27,7 @@ function App() {
   return (
     <main>
       <Navbar userId={userId} setQuery={setQuery}/>
+    
       <CourseContext.Provider value={valueCourse}>
         <UserContext.Provider value={valueUser}>
           <Routes>
