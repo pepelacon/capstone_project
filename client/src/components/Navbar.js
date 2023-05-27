@@ -3,7 +3,6 @@ import SignUp from "./SignUp";
 import DropdownMenu from "./DropdownMenu";
 import { useAuth0 } from "@auth0/auth0-react";
 import { AiOutlineSearch, AiOutlineCloseCircle } from "react-icons/ai";
-import { RxCross2 } from "react-icons/rx";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 

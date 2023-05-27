@@ -17,16 +17,15 @@ export default function AllContainer ({query}) {
         fetchCourses();
     },[]);
     
-    let all_course = allCourses.filter((course) => course.title.toLowerCase().includes(query)
+    let all_course = allCourses.filter((course) => course.title.toLowerCase().includes(query.toLowerCase())
     ).map((course) => (<CourseCard key={course.id} {...course}/>))
     
     return (
-        <div className="flex justify-center items-center">
+       
             
-            <div className="mt-16 w-4/5 grid grid-cols-5 gap-8 pt-4">    
+            <div className="mt-16 w-4/5 grid grid-cols-5 gap-8 pt-4 px-4">    
                 {all_course}
             </div>
-        </div>
 
     )
 
