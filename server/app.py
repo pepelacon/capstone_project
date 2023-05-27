@@ -69,6 +69,12 @@ class Courses(Resource):
 
 api.add_resource(Courses, '/course')
 
+class CoursesBest(Resource):
+    def get(self):
+        best_courses = Course.get_best_courses_in_each_category()
+        best_courses_dict = [course.to_dict() for course in best_courses]
+        return make_response(best_courses_dict, 200)
+api.add_resource(CoursesBest, '/course/best')
 
 class Users(Resource):
     def post(self):

@@ -1,0 +1,35 @@
+.slider {
+    display: flex;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 0;
+  }
+  
+  .slide {
+    flex: 0 0 auto;
+    margin: 0 16px; /* Adjust padding for the gap */
+    width: 17.862%; /* Calculate width to account for padding */
+  }
+  
+  .slide:first-child {
+    margin-left: 0; /* Remove left padding for the first card */
+  }
+  
+  .slide:last-child {
+    margin-right: 0; /* Remove right padding for the last card */
+  }
+  
+  .slider-controls {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .slider-control-btn {
+    margin: 0 4px;
+    padding: 8px 12px; /* Adjust padding for the button */
+    background-color: #ddd;
+    border: none;
+    cursor: pointer;
+  }

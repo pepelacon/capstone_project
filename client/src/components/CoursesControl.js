@@ -4,9 +4,6 @@ import { UserContext } from '../UserContext'
 import { useNavigate } from 'react-router-dom';
 
 
-
-
-
 export default function CoursesControl () {
     const [allCourses, setAllCourses] = useState([])
     const { userId } = useContext(UserContext) 

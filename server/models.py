@@ -4,6 +4,7 @@ from sqlalchemy.orm import validates
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy import func
 from sqlalchemy.orm import validates
+from sqlalchemy import desc
 
 
 db = SQLAlchemy()
@@ -87,6 +88,7 @@ class Course(db.Model):
     comments = db.relationship('Comment', back_populates='course',cascade="all, delete, delete-orphan")
     ratings = db.relationship('Rating', back_populates='course',cascade="all, delete, delete-orphan")
 
+  
     def calculate_average_rating(self):
         average = db.session.query(func.avg(Rating.rate)).filter(Rating.course_id == self.id).scalar()
         return average or 0
@@ -94,6 +96,27 @@ class Course(db.Model):
     def get_enrolled_users(self):
         enrolled_users = [enrollment.user.to_dict() for enrollment in self.enrollments]
         return enrolled_users
+    
+    @staticmethod
+    def get_best_courses_in_each_category():
+        categories = db.session.query(Course.category.distinct()).all()
+        best_courses = []
+
+        for category in categories:
+            category_courses = (
+                Course.query.filter_by(category=category[0])
+                .order_by(desc(func.avg(Rating.rate)))
+                .join(Rating)
+                .group_by(Course.id)
+                .limit(1)
+                .all()
+            )
+
+            if category_courses:
+                best_courses.append(category_courses[0])
+
+        return best_courses
+    
     
     def to_dict(self):
         average_rating = self.calculate_average_rating()
@@ -112,7 +135,8 @@ class Course(db.Model):
             'comments': comments,
             'instructor': instructor,
             'lessons': lessons,
-            'enrolled_users': enrolled_users
+            'enrolled_users': enrolled_users,
+            'category': self.category
         }
 
 class Lesson(db.Model):
