@@ -12,6 +12,7 @@ import { UserContext } from "./UserContext";
 import { CourseContext } from "./CourseContext";
 import { CourseDetail } from "./components/CourseDetail";
 import CoursesControl from "./components/CoursesControl";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const [userId, setUserId] = useState(null);
@@ -44,6 +45,11 @@ function App() {
           </Routes>
         </UserContext.Provider>
       </CourseContext.Provider>
+      <div>
+        <div className="h-screen"></div>
+        <Footer />
+      </div>
+  
     </main>
   );
 }

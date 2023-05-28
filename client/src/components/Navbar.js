@@ -29,7 +29,7 @@ function NavBar({ userId, setQuery }) {
   }
 
   return (
-    <div className=" bg-blue-900 w-full mx-auto px-4 sm:px-6 lg:px-8">
+    <div className=" bg-blue-900 w-full py-1 mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex items-center flex-wrap justify-between w-full h-16">
         <div className="hidden lg:flex items-center w-1/4 ">
           {role === "student" ? (

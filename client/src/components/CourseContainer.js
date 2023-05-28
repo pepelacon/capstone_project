@@ -6,6 +6,7 @@ import Cover from './Cover';
 
 
 
+
 export default function CourseContainer ({query}) {
     const [ filter, setFilter ] = useState('All')
     const handleClick = (category) => {
@@ -34,6 +35,7 @@ export default function CourseContainer ({query}) {
             </div>
             {filter === 'All' && query === '' && <BestContainer />}
             {/* <BestContainer />    */}
+            
             <AllContainer query={query} filter={filter}/>
         </div>
      
