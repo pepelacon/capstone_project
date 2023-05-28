@@ -76,10 +76,11 @@ const UserProfile = () => {
     return (
       <>
         {userId && (
-          <div className="max-w-md mx-auto bg-white mt-12 shadow-md overflow-hidden">
+          <div className="max-w-md mx-auto bg-white my-12 shadow-md overflow-hidden">
             <div className="flex items-center space-x-4 p-4">
               <img
-                className="w-32 h-32 object-cover"
+                className=" object-cover"
+                style={{ maxWidth: '100%', maxHeight: '100px' }}
                 src={userId.avatar}
                 alt="Profile"
               />
@@ -96,7 +97,7 @@ const UserProfile = () => {
             <div className="flex justify-between px-4 py-2">
               <button
                 className="p-2 border-0 rounded-full hover:bg-gray-300"
-                onClick={toggleSettings} // Toggle settings window visibility
+                onClick={toggleSettings} 
               >
                 <RxGear size={25} />
               </button>

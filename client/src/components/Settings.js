@@ -64,7 +64,7 @@ function Settings({setShowSettings}) {
             <img
               src={URL.createObjectURL(file)}
               alt="Dropped Image"
-              style={{ maxWidth: '100%', maxHeight: '200px' }}
+              style={{ maxWidth: '100%', maxHeight: '150px' }}
             />
           ) : isDragActive ? (
             <p>Drop the file here...</p>
@@ -76,12 +76,12 @@ function Settings({setShowSettings}) {
       <div className="flex flex-col justify-center items-center">
         <h4>Nickname:</h4>
         <input
-          className="border-2 border-black"
+          className="border-2 w-72 border-black mt-2"
           type="text"
           value={nickname}
           onChange={handleNickNameChange}
         />
-        <button onClick={handleSubmit}>Update</button>
+        <button className="hover:bg-gray-300 mt-4" onClick={handleSubmit}>Update</button>
       </div>
     </div>
   );
