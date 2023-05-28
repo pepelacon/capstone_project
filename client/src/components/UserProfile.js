@@ -2,7 +2,11 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useContext } from 'react'
 import { UserContext } from '../UserContext'
 import { useNavigate } from 'react-router-dom';
+import { HiTrash } from "react-icons/hi"
+import { RxGear } from "react-icons/rx"
 
+
+import { Link } from "react-router-dom";
 
 
 const UserProfile = () => {
@@ -65,38 +69,37 @@ const UserProfile = () => {
 
 // update profile   
     return (
-      <> { userId && 
-        (  <div className="max-w-md mx-auto bg-white mt-8 shadow-md rounded-md overflow-hidden">
-          <div className="flex items-center space-x-4 p-4">
-            <img
-              className="w-16 h-16 rounded-full object-cover"
-              src={userId.avatar}
-              alt="Profile"
-            />
-            <div>
-              <h2 className="text-lg font-semibold">{userId.name}</h2>
-              <p className="text-gray-600">{userId.email}</p>
+      <>
+        {userId && (
+          <div className="max-w-md mx-auto bg-white mt-16 shadow-md overflow-hidden">
+            <div className="flex items-center space-x-4 p-4">
+              <img
+                className="w-32 h-32 object-cover"
+                src={userId.avatar}
+                alt="Profile"
+              />
+              <div>
+                <h2 className="text-lg font-semibold">{userId.nickname}</h2>
+                <p className="text-gray-600">Account email: {userId.email}</p>
+              </div>
+            </div>
+
+            <div className="bg-gray-100 px-4 py-2">
+              <p className="text-sm text-gray-500">Joined: {formattedDate}</p>
+            </div>
+
+            <div className="flex justify-between px-4 py-2">
+              <Link to="/settings" className="p-2 rounded-full hover:bg-gray-300">
+                <RxGear size={25} />
+              </Link>
+              <button className="p-2 border-0 rounded-full hover:bg-gray-300" onClick={handleDelete}>
+                <HiTrash size={25} />
+              </button>
             </div>
           </div>
-          <div className="px-4 py-2">
-            <p className="text-gray-700">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-              aliquet ex ut justo ullamcorper malesuada. Curabitur tincidunt
-              tristique ipsum, id feugiat nunc euismod sed.
-            </p>
-          </div>
-          <div className="bg-gray-100 px-4 py-2">
-            <p className="text-sm text-gray-500">
-              Joined: {formattedDate}
-            </p>
-          
-          </div>
-          <button onClick={() => navigate('/settings')}>Settings</button>
-          <button onClick={handleDelete}>Delete Account</button>
-
-        </div>)}
+        )}
       </>
-      )
+    );
 
 }
 

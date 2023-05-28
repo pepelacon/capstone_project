@@ -13,7 +13,7 @@ export const CourseDetail = () => {
 
   const roundedRating = Math.round(courseInfo.average_rating * 2) / 2;
   const roundedRatingToShow = Math.round(courseInfo.average_rating * 10) / 10;
-  // const enrolledUsers = courseInfo.enrolled_users.length
+  const enrolledUsers = courseInfo.enrolled_users?.length || 0
 
   let { id: courseId } = useParams();
 
@@ -90,7 +90,7 @@ export const CourseDetail = () => {
                   readOnly
                   size="small"
                 />
-                {/* <div className="ml-2 text-base text-md md:mr-2">({enrolledUsers})</div> */}
+                <div className="ml-2 text-base text-md md:mr-2">({enrolledUsers})</div>
               </div>
 
               <div className="text-md text-center md:text-left md:text-lg text-darkGrayishBlue mt-2 font-bold">
