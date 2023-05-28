@@ -5,19 +5,19 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import {FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
-export default function BestContainer() {
+export default function NewestContainer() {
   const navigate = useNavigate();
-  const [bestCourses, setBestCourses] = useState([]);
-    console.log(bestCourses);
+  const [newestCourses, setNewestCourses] = useState([]);
+    console.log(newestCourses);
   useEffect(() => {
     fetchCourses();
   }, []);
-console.log(bestCourses);
+
   const fetchCourses = async () => {
     try {
-      const response = await fetch(`/course/best`);
+      const response = await fetch(`/course/newest`);
       const data = await response.json();
-      setBestCourses(data);
+      setNewestCourses(data);
     } catch (error) {
       console.error('Error fetching courses:', error);
     }
@@ -27,7 +27,7 @@ console.log(bestCourses);
     navigate(`/detail/${id}`);
   };
 
-  let best_courses = bestCourses.map((course) => (
+  let newest_courses = newestCourses.map((course) => (
     <div className="mx-4" key={course.id}>
       <CourseCard {...course} onClick={() => handleCourseClick(course.id)} />
     </div>
@@ -79,8 +79,8 @@ console.log(bestCourses);
 
   return (
       <div className="w-4/5  ">
-        <h2 className='text-black font-bold md:text-2xl pt-4 pl-4'>Best rated</h2>
-        <h2 className='text-black  md:text-xl pl-4 pb-2'>Best course in each category</h2>
+        <h2 className='text-black font-bold md:text-2xl pt-4 pl-4'>What to learn next</h2>
+        <h2 className='text-black  md:text-xl pl-4 pb-2'>Newest courses </h2>
 
         <Carousel 
             responsive={responsive}
@@ -88,7 +88,7 @@ console.log(bestCourses);
             // customRightArrow={<CustomRightArrow />}
             // renderArrowNext={<CustomLeftArrow />}
         >
-            {best_courses}
+            {newest_courses}
         </Carousel>
       </div>
   );

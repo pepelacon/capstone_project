@@ -22,13 +22,13 @@ const Footer = () => {
           className="p-2 cursor-pointer inline-flex items-center justify-center gap-4
         rounded-full mx-1.5 text-xl "
         >
-            <a href="https://www.instagram.com">
+            <a href="https://www.instagram.com/daniel_pryakhin/?igshid=MzNlNGNkZWQ4Mg%3D%3D">
                 <SiInstagram />
             </a>
-            <a href="https://www.linkedin.com">
+            <a href="https://www.linkedin.com/in/daniel-pryakhin/">
                 <SiLinkedin />
             </a>
-            <a href="https://www.github.com">
+            <a href="https://github.com/pepelacon">
                 <SiGithub />
             </a>
         </span>

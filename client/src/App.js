@@ -45,8 +45,7 @@ function App() {
           </Routes>
         </UserContext.Provider>
       </CourseContext.Provider>
-      <div>
-        <div className="h-screen"></div>
+      <div className="mt-6">
         <Footer />
       </div>
   

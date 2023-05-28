@@ -98,10 +98,14 @@ class Course(db.Model):
         return enrolled_users
     
     @staticmethod
+    def get_newest_courses():
+        newest_courses = Course.query.order_by(Course.created_at.desc()).limit(10).all()
+        return newest_courses
+    
+    @staticmethod
     def get_best_courses_in_each_category():
         categories = db.session.query(Course.category.distinct()).all()
         best_courses = []
-
         for category in categories:
             category_courses = (
                 Course.query.filter_by(category=category[0])

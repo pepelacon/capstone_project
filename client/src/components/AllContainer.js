@@ -23,7 +23,9 @@ export default function AllContainer ({query, filter}) {
     return (
          <>
             <div className=" w-4/5 mt-4">    
-                <h2  className='text-black font-bold md:text-xl p-4 '>Best courses</h2>
+                <h2  className='text-black font-bold md:text-2xl pt-4 pl-4 '>Best courses</h2>
+                <h2 className='text-black  md:text-xl pl-4 pb-2'>All list of courses</h2>
+
 
                 <div className="  grid grid-cols-5 gap-8 px-4">    
 

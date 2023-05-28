@@ -13,7 +13,7 @@ export const CourseDetail = () => {
     const roundedRatingToShow = (Math.round(courseInfo.average_rating * 10) / 10);
     let { id: courseId } = useParams()
 
-
+    console.log(userId);
     const navigate = useNavigate()
     useEffect(() => {
         const fetchData = async () => {
@@ -115,12 +115,16 @@ export const CourseDetail = () => {
                     Author: {courseInfo.instructor.name}
                 </p>
                 
-                {!isEnrolled ? (
-                <button id="single-card-button" size="medium" onClick={handleAddCourse}>
-                    Add Course
-                </button>
-                ) : (
-                <button>Enrolled</button>
+                {!userId ? (
+                    <button id="single-card-button" size="medium" disabled>
+                        You need to register to apply
+                    </button>
+                    ) : !isEnrolled ? (
+                    <button id="single-card-button" size="medium" onClick={handleAddCourse}>
+                        Add Course
+                    </button>
+                    ) : (
+                    <button disabled>Enrolled</button>
                 )}
             </div>
         </div>
