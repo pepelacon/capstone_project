@@ -8,11 +8,11 @@ import {FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 export default function BestContainer() {
   const navigate = useNavigate();
   const [bestCourses, setBestCourses] = useState([]);
-    console.log(bestCourses);
+    
   useEffect(() => {
     fetchCourses();
   }, []);
-console.log(bestCourses);
+
   const fetchCourses = async () => {
     try {
       const response = await fetch(`/course/best`);

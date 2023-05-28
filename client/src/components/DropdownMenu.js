@@ -42,7 +42,7 @@ const DropdownMenu = ({userId, role}) => {
             </div>
     
         {isOpen && (
-            <div className="origin-top-right absolute right-0 mt-3 w-60 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-10">
+            <div className="origin-top-right absolute right-0 mt-3 w-60 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-10 z-50">
                 <div role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                     <div className="flex items-center space-x-2 p-2 my-2">
                         <img

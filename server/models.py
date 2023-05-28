@@ -170,6 +170,24 @@ class Lesson(db.Model):
             'video': self.video,
         }
     
+    @validates('title')
+    def validate_title(self, key, value):
+        if not value:
+            raise ValueError('Title is required')
+        return value
+
+    @validates('video')
+    def validate_category(self, key, value):
+        if not value:
+            raise ValueError('Video is required')
+        return value
+
+    @validates('description')
+    def validate_description(self, key, value):
+        if not value:
+            raise ValueError('Description is required')
+        return value
+    
 
 class LessonProgress(db.Model):
 
@@ -230,6 +248,15 @@ class Comment(db.Model, SerializerMixin):
     
     user = db.relationship('User', back_populates='comments')
     course = db.relationship('Course', back_populates='comments')
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'content': self.content,
+            'user_id': self.user_id,
+            'course_id': self.course_id,
+            'created_at': self.created_at,
+            'user': self.user.to_dict() 
+        }
 
 class Rating(db.Model, SerializerMixin):
 

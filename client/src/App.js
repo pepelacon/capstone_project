@@ -26,30 +26,32 @@ function App() {
   console.log(course);
 
   return (
-    <main>
-      <Navbar userId={userId} setQuery={setQuery}/>
-    
-      <CourseContext.Provider value={valueCourse}>
-        <UserContext.Provider value={valueUser}>
-          <Routes>
-            <Route path="/" element={<CourseContainer query={query}/>} />
-            <Route path="/profile" element={<UserProfile />} />
-            <Route path="/create_course" element={<CreateCourseForm />} />
-            <Route path="/create_lesson" element={<CreateLesson />} />
-            <Route path="/detail/:id" element={<CourseDetail />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/my_learning" element={<MyLearning />} />
-            <Route path="/instructor_courses" element={<CoursesControl />} />
-            
-            <Route path="/learning_process/:id" element={<LearningPage />} />
-          </Routes>
-        </UserContext.Provider>
-      </CourseContext.Provider>
-      <div className="mt-6">
+   
+      <div className="flex flex-col min-h-screen">
+        <main className="flex-grow">
+        <Navbar userId={userId} setQuery={setQuery}/>
+      
+        <CourseContext.Provider value={valueCourse}>
+          <UserContext.Provider value={valueUser}>
+            <Routes>
+              <Route path="/" element={<CourseContainer query={query}/>} />
+              <Route path="/profile" element={<UserProfile />} />
+              <Route path="/create_course" element={<CreateCourseForm />} />
+              <Route path="/create_lesson" element={<CreateLesson />} />
+              <Route path="/detail/:id" element={<CourseDetail />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/my_learning" element={<MyLearning />} />
+              <Route path="/instructor_courses" element={<CoursesControl />} />
+              
+              <Route path="/learning_process/:id" element={<LearningPage />} />
+            </Routes>
+          </UserContext.Provider>
+        </CourseContext.Provider>
+        </main>
+      <footer className="mt-auto">
         <Footer />
-      </div>
-  
-    </main>
+      </footer>
+    </div>
   );
 }
 

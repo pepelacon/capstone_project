@@ -8,7 +8,7 @@ import {FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 export default function NewestContainer() {
   const navigate = useNavigate();
   const [newestCourses, setNewestCourses] = useState([]);
-    console.log(newestCourses);
+   
   useEffect(() => {
     fetchCourses();
   }, []);
