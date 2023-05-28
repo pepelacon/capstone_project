@@ -143,14 +143,12 @@ export default function YourLearningCard(course) {
               />
             </div>
             <div className="flex justify-between pt-2">
-              {/* Close button */}
               <div
                 className="mb-0 border-0 rounded-full hover:bg-blue-500"
                 onClick={() => setIsOpen(false)}
               >
                 <AiFillCloseCircle size={35} />
               </div>
-              {/* Submit button */}
               <button
                 className="pt-2 mb-0 border-0 rounded-full hover:bg-gray-300"
                 onClick={handleSubmitReview}

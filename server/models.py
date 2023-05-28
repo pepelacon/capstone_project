@@ -295,5 +295,6 @@ class Message(db.Model):
             'sender_id': self.sender_id,
             'lesson_id': self.lesson_id,
             'content': self.content,
-            'created_at': self.created_at
+            'created_at': self.created_at,
+            'sender': self.sender.to_dict()
         }

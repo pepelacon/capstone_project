@@ -362,22 +362,16 @@ api.add_resource(LessonProgression, '/lesson_progression/<int:userId>/<int:id>')
 class Messages(Resource):
     def get(self, id):
         lesson = Lesson.query.filter_by(id=id).first()
-    
+
         if not lesson:
             return make_response({"message": "Lesson not found"}, 404)
-        
+
         messages = lesson.messages
-        
+
         message_data = []
         for message in messages:
-            message_data.append({
-                'sender_id': message.sender_id,
-                'lesson_id': message.lesson_id,
-                'content': message.content,
-                'created_at': message.created_at,
-                'id': message.id
-            })
-        
+            message_data.append(message.to_dict())
+
         return make_response(message_data, 200)
     
     def post(self, id):

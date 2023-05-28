@@ -23,7 +23,7 @@ export default function MyLearning () {
       <div className="flex mx-auto pt-6 flex-col">
         <div className="flex mx-auto justify-start max-w-[1240px] ">
 
-          <h2 className="p-4 font-bold text-4xl">My learning</h2>
+          <h2 className="p-4 font-bold text-3xl">My learning</h2>
         </div>
         <div className="max-w-[1240px] mx-auto pb-12 grid md:grid-cols-4 gap-6">
           {all_course}
