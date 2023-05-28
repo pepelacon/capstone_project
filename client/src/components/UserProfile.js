@@ -1,17 +1,20 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { useEffect, useContext } from 'react'
+import { useEffect, useContext, useState } from 'react'
 import { UserContext } from '../UserContext'
 import { useNavigate } from 'react-router-dom';
 import { HiTrash } from "react-icons/hi"
 import { RxGear } from "react-icons/rx"
+import Settings from './Settings';
 
 
-import { Link } from "react-router-dom";
+
+
+
 
 
 const UserProfile = () => {
     const { userId, setUserId } = useContext(UserContext) 
-
+    const [showSettings, setShowSettings] = useState(false);
     const { user, isLoading, logout  } = useAuth0();
     const navigate = useNavigate()
 
@@ -66,12 +69,14 @@ const UserProfile = () => {
       day: 'numeric',
     }) : '';
     
-
+    const toggleSettings = () => {
+      setShowSettings(!showSettings);
+    };
 // update profile   
     return (
       <>
         {userId && (
-          <div className="max-w-md mx-auto bg-white mt-16 shadow-md overflow-hidden">
+          <div className="max-w-md mx-auto bg-white mt-12 shadow-md overflow-hidden">
             <div className="flex items-center space-x-4 p-4">
               <img
                 className="w-32 h-32 object-cover"
@@ -89,13 +94,17 @@ const UserProfile = () => {
             </div>
 
             <div className="flex justify-between px-4 py-2">
-              <Link to="/settings" className="p-2 rounded-full hover:bg-gray-300">
+              <button
+                className="p-2 border-0 rounded-full hover:bg-gray-300"
+                onClick={toggleSettings} // Toggle settings window visibility
+              >
                 <RxGear size={25} />
-              </Link>
+              </button>
               <button className="p-2 border-0 rounded-full hover:bg-gray-300" onClick={handleDelete}>
                 <HiTrash size={25} />
               </button>
             </div>
+            {showSettings && <Settings setShowSettings={setShowSettings} />}
           </div>
         )}
       </>

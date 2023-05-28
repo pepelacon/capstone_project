@@ -23,7 +23,7 @@ function App() {
   const valueUser = useMemo(() => ({ userId, setUserId }), [userId, setUserId]);
   const valueCourse = useMemo(() => ({ course, setCourse }), [course, setCourse]);
 
-  console.log(course);
+ 
 
   return (
    
