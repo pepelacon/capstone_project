@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { CourseContext } from '../CourseContext';
 import { useDropzone } from 'react-dropzone';
 import { useNavigate } from 'react-router-dom';
+// import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 const validationSchema = yup.object().shape({
@@ -94,7 +95,7 @@ function CreateLesson() {
         </div>
 
         <div className="w-102 bg-blue shadow-lg rounded-lg px-8 py-6">
-          <h2 className="text-xl text-blue-900 font-bold mb-4">Create {lesson.length + 1} lesson!</h2>
+          <h2 className="text-xl text-blue-900 font-bold mb-4">Create lesson number {lesson.length + 1}</h2>
           <form onSubmit={formik.handleSubmit}>
           <div
               {...getRootProps()}
@@ -144,9 +145,16 @@ function CreateLesson() {
               <button className="rounded-full hover:bg-blue-300" type="submit" disabled={!formik.isValid || formik.isSubmitting}>
                 Upload
               </button>
-              <button className="rounded-full hover:bg-blue-300" type="submit" onClick={handleFinish}>
-                Finish
-              </button>
+              { lesson.length > 0 ?
+
+                <button className="rounded-full hover:bg-blue-300" type="submit" onClick={handleFinish}>
+                  Finish
+                </button> :
+                <h2>
+                  You need to add at least one lesson
+                </h2>
+
+              }
             </div>
           </form>
         </div>
