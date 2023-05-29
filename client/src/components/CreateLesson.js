@@ -24,10 +24,11 @@ const validationSchema = yup.object().shape({
 function CreateLesson() {
   const { course } = useContext(CourseContext);
   const [video, setVideo] = useState(null);
-  const [lesson, setLessons] = useState([])
+  const [lesson, setLessons] = useState(course.lessons)
   const navigate = useNavigate()
 
-  
+  console.log(course);
+
   console.log(lesson);
   const handleVideoChange = (event) => {
     const selectedVideo = event.target.files[0];

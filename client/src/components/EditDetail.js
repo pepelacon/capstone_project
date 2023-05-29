@@ -3,82 +3,164 @@ import { useParams, useNavigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import Rating from "@mui/material/Rating";
 import { HiChevronLeft } from "react-icons/hi";
-import axios from 'axios';
+import axios from "axios";
+import { useDropzone } from "react-dropzone";
+import { CourseContext } from "../CourseContext";
+
 
 export const EditDetail = () => {
   const { userId } = useContext(UserContext);
+  const { course, setCourse } = useContext(CourseContext);
+
   const [courseInfo, setCourseInfo] = useState({});
-  const [isEnrolled, setIsEnrolled] = useState(false);
+
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [isEditingProfilePicture, setIsEditingProfilePicture] = useState(false);
+  const [editedDescription, setEditedDescription] = useState("");
+  const [editedTitle, setEditedTitle] = useState("");
+  const [editedProfilePicture, setEditedProfilePicture] = useState("");
+  const [previewImage, setPreviewImage] = useState("");
 
   const navigate = useNavigate();
 
   const roundedRating = Math.round(courseInfo.average_rating * 2) / 2;
   const roundedRatingToShow = Math.round(courseInfo.average_rating * 10) / 10;
-  const enrolledUsers = courseInfo.enrolled_users?.length || 0
-
+  const enrolledUsers = courseInfo.enrolled_users?.length || 0;
+    console.log(course);
   let { id: courseId } = useParams();
 
   console.log(courseInfo);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const courseResponse = await fetch(`/edit/${courseId}`);
-        const courseData = await courseResponse.json();
-        setCourseInfo(courseData);
-        let enrolled = courseData.enrolled_users.filter(
-          (user) => user.id === userId.id
-        );
-        if (enrolled.length !== 0) {
-          setIsEnrolled(true);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
+    fetchCourseDetails(courseId);
   }, [courseId]);
 
-  const handleAddCourse = () => {
-    fetch(`/enrollments`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        course_id: courseInfo.id,
-        user_id: userId.id,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setIsEnrolled(true);
-        const enrollmentId = data.id;
-        fetch(`/lesson_progression/${userId.id}/${courseInfo.id}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            enrollment_id: enrollmentId,
-          }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data);
-          });
-      });
+  const fetchCourseDetails = async (id) => {
+    try {
+      const response = await fetch(`/edit/${id}`);
+      const data = await response.json();
+      setCourseInfo(data);
+      setCourse(data)
+    } catch (error) {
+      console.error("Error fetching course details:", error);
+    }
   };
 
   const handleDeleteCourse = () => {
-    axios.delete(`/edit/${courseId}`)
+    axios
+      .delete(`/edit/${courseId}`)
       .then((response) => {
-        console.log('Course deleted:', response.data);
-        navigate("/instructor_courses")
+        console.log("Course deleted:", response.data);
+        navigate("/instructor_courses");
       })
       .catch((error) => {
-        console.error('Error deleting:', error);
+        console.error("Error deleting:", error);
       });
   };
+
+  const handleEditDescription = () => {
+    setIsEditingDescription(true);
+    setEditedDescription(courseInfo.description);
+  };
+
+  const handleSaveDescription = async () => {
+    try {
+      const response = await fetch(`/edit/${courseId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ description: editedDescription }),
+      });
+      if (response.ok) {
+        setIsEditingDescription(false);
+        fetchCourseDetails(courseId);
+      } else {
+        console.error("Failed to update description");
+      }
+    } catch (error) {
+      console.error("Error updating description:", error);
+    }
+  };
+
+  const handleEditTitle = () => {
+    setIsEditingTitle(true);
+    setEditedTitle(courseInfo.title);
+  };
+
+  const handleSaveTitle = async () => {
+    try {
+      const response = await fetch(`/edit/${courseId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title: editedTitle }),
+      });
+      if (response.ok) {
+        setIsEditingTitle(false);
+        fetchCourseDetails(courseId);
+      } else {
+        console.error("Failed to update title");
+      }
+    } catch (error) {
+      console.error("Error updating title:", error);
+    }
+  };
+
+  const handlePictureDrop = async (acceptedFiles) => {
+    try {
+        const file = acceptedFiles[0];
+        const formData = new FormData();
+        if (file === null) {
+          formData.append("fileExists", "false");
+        } else {
+          formData.append("fileExists", "true");
+          formData.append("picture", file);
+          setPreviewImage(URL.createObjectURL(file)); 
+        }
+    
+        console.log(file);
+      const response = await fetch(`/edit/${courseId}`, {
+        method: "PATCH",
+        body: formData,
+      });
+
+      if (response.ok) {
+        setIsEditingProfilePicture(false);
+        fetchCourseDetails(courseId);
+      } else {
+        console.error("Failed to update profile picture");
+      }
+    } catch (error) {
+      console.error("Error updating profile picture:", error);
+    }
+  };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: handlePictureDrop,
+    accept: "image/*",
+    multiple: false,
+  });
+
+  const handleEditProfilePicture = () => {
+    setIsEditingProfilePicture(true);
+    setEditedProfilePicture(courseInfo.picture);
+  };
+
+  const deleteLesson = (lessonId) => {
+    console.log(lessonId);
+        axios
+          .delete(`/lesson/${lessonId}`)
+          .then((response) => {
+            console.log("lesson deleted:", response.data);
+          })
+          .catch((error) => {
+            console.error("Error deleting:", error);
+          });
+      };
+    
+  
 
 
   return (
@@ -90,7 +172,31 @@ export const EditDetail = () => {
           <div className="container justify-center w-3/4 md:w-1/2 flex flex-col mx-auto my-16 space-y-12 md:space-y-0 md:flex-row">
             <div className="w-full md:w-3/4 items-center justify-center pr-4 md:justify-start md:text-left">
               <div className="text-md md:text-2xl font-bold">
-                {courseInfo.title}
+                {isEditingTitle ? (
+                  <>
+                    <input
+                      type="text"
+                      value={editedTitle}
+                      onChange={(e) => setEditedTitle(e.target.value)}
+                    />
+                    <button
+                      onClick={handleSaveTitle}
+                      className="text-blue-500 ml-2"
+                    >
+                      Approve
+                    </button>
+                  </>
+                ) : (
+                  courseInfo.title
+                )}
+                {!isEditingTitle && (
+                  <button
+                    onClick={handleEditTitle}
+                    className="text-blue-500 ml-2"
+                  >
+                    Edit
+                  </button>
+                )}
               </div>
               <div className="max-w-sm flex justify-center md:justify-start items-center font-bold text-darkGrayishBlue">
                 <div className="text-orange-700 font-bold text-md md:mr-2">
@@ -103,21 +209,48 @@ export const EditDetail = () => {
                   readOnly
                   size="small"
                 />
-                <div className="ml-2 text-base text-md md:mr-2">({enrolledUsers})</div>
+                <div className="ml-2 text-base text-md md:mr-2">
+                  ({enrolledUsers})
+                </div>
               </div>
 
               <div className="text-md text-center md:text-left md:text-lg text-darkGrayishBlue mt-2 font-bold">
                 Description:
               </div>
-              <p className="text-sm md:text-base text-center md:text-left text-darkGrayishBlue w-full">
-                {courseInfo.description}
-              </p>
+              {isEditingDescription ? (
+                <>
+                  <textarea
+                    value={editedDescription}
+                    onChange={(e) => setEditedDescription(e.target.value)}
+                  />
+                  <button
+                    onClick={handleSaveDescription}
+                    className="text-blue-500 mt-2"
+                  >
+                    approve
+                  </button>
+                </>
+              ) : (
+                <p className="text-sm md:text-base text-center md:text-left text-darkGrayishBlue w-full">
+                  {courseInfo.description}
+                </p>
+              )}
+              {!isEditingDescription && (
+                <button
+                  onClick={handleEditDescription}
+                  className="text-blue-500 mt-2"
+                >
+                  Edit
+                </button>
+              )}
 
               <div className=" mt-2">
                 <div className="text-md text-center md:text-left md:text-lg text-darkGrayishBlue mt-2 font-bold">
                   What you'll learn:
                 </div>
                 <ul className="text-sm md:text-lg text-center md:text-left text-darkGrayishBlue w-full">
+                <button onClick={() => navigate("/create_lesson")}>add lesson</button>
+
                   {courseInfo.lessons.map((lesson) => (
                     <li
                       key={lesson.id}
@@ -136,6 +269,7 @@ export const EditDetail = () => {
                         />
                       </svg>
                       {lesson.title}
+                      <button onClick={() => deleteLesson(lesson.id)}>delete lesson</button>
                     </li>
                   ))}
                 </ul>
@@ -167,28 +301,62 @@ export const EditDetail = () => {
               </div>
             </div>
             <div className="flex flex-col space-y-3 w-full md:w-1/3 mx-auto">
-              <img
-                src={courseInfo.picture}
-                alt="Course"
-                className="h-[250px] aspect-w-1 mx-auto"
-              />
-              <p className="text-center text-darkGrayishBlue md:text-left">
-                Author: {courseInfo.instructor.name}
-              </p>
+              {isEditingProfilePicture ? (
+                 <>
+                 <div
+                   {...getRootProps()}
+                   className="w-full px-3 py-2 border mb-2 flex justify-center rounded focus:outline-none focus:border-blue-500"
+                 >
+                   <input {...getInputProps()} />
+                   {previewImage ? ( // Render the preview image if available
+                     <img
+                       src={previewImage}
+                       alt="Dropped Image"
+                       style={{ maxWidth: "100%", maxHeight: "200px" }}
+                     />
+                   ) : isDragActive ? (
+                     <p>Drop the file here...</p>
+                   ) : (
+                     <p>Drag and drop an image here, or click to select an image</p>
+                   )}
+                 </div>
+                 <button onClick={handlePictureDrop}>Save</button>
+               </>
+              ) : (
+                <>
+                  <img
+                    src={courseInfo.picture}
+                    alt="Course"
+                    className="h-[250px] aspect-w-1 mx-auto"
+                  />
+                  <p className="text-center text-darkGrayishBlue md:text-left">
+                    Author: {courseInfo.instructor.name}
+                  </p>
+                  <button
+                    onClick={handleEditProfilePicture}
+                    className="text-blue-500"
+                  >
+                    Edit Profile Picture
+                  </button>
+                </>
+              )}
 
-             
-                <button className="hover:bg-blue-300 rounded-full" onClick={handleDeleteCourse}>Delete course</button>
-             
+              <button
+                className="hover:bg-blue-300 rounded-full"
+                onClick={handleDeleteCourse}
+              >
+                Delete course
+              </button>
             </div>
           </div>
-            <button
-                onClick={() => {
-                    navigate("/instructor_courses");
-                }}
-                className="p-2 rounded-full hover:bg-gray-300 fixed top-36 left-8"
-            >
-                <HiChevronLeft size={25} />
-            </button>
+          <button
+            onClick={() => {
+              navigate("/instructor_courses");
+            }}
+            className="p-2 rounded-full hover:bg-gray-300 fixed top-36 left-8"
+          >
+            <HiChevronLeft size={25} />
+          </button>
         </>
       )}
     </section>

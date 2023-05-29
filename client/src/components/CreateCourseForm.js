@@ -61,6 +61,7 @@ function CreateCourseForm() {
 
   const handlePictureDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
+    console.log(file);
     formik.setFieldValue('picture', file);
   };
 

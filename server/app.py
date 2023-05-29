@@ -177,12 +177,59 @@ class CreateLesson(Resource):
         return make_response(new_lesson.to_dict(), 200)   
 api.add_resource(CreateLesson, '/create_lesson')
 
+class DeleteLesson(Resource):
+    def delete(self, id):
+        lesson = Lesson.query.filter_by(id=id).first()
+        if not lesson:
+            return make_response({"message": "Lesson not found"}, 404)
+        db.session.delete(lesson)
+        db.session.commit()
+            
+api.add_resource(DeleteLesson, '/lesson/<int:id>')
+
+
 class CourseEdit(Resource):
     def get(self, id):
         course = Course.query.filter_by(id=id).first()
         if not course:
             return make_response({"message": "Course not found"})
         return make_response(course.to_dict(), 200)   
+    
+    def patch(self, id):
+        course = Course.query.filter_by(id=id).first()
+        if not course:
+            return make_response({"message": "Course not found"}, 404)
+
+        try:
+            data = request.get_json()
+            print(data)
+            picture = request.files.get("picture")
+
+            if "description" in data:
+                course.description = data["description"]
+            if "title" in data:
+                course.title = data["title"]
+            picture = request.files.get("picture")
+            if picture:
+                s3 = boto3.resource('s3', aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+                                    aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'))
+                bucket = s3.Bucket('user-avatar-capstone')
+                file_url = f"https://{bucket.name}.s3.amazonaws.com/{picture.filename}" 
+                bucket.put_object(Key=picture.filename, Body=picture)
+                course.picture = file_url
+
+
+            db.session.commit()
+
+            response_dict = course.to_dict()
+
+            response = make_response(
+                response_dict,
+                200,
+            )
+            return response
+        except Exception as ex:
+            return make_response({"errors": [ex.__str__()]}, 422)
     
     def delete(self, id):
         course = Course.query.filter_by(id=id).first() 
