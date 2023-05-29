@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../UserContext";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Divider from "@mui/material/Divider";
 import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined";
 import CheckBoxOutlinedIcon from "@mui/icons-material/CheckBoxOutlined";
 import axios from "axios";
-// import Scrollbar from 'react-scrollbar';
+
 
 export default function LearningPage() {
   const { userId } = useContext(UserContext);

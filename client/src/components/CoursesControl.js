@@ -33,10 +33,15 @@ export default function CoursesControl () {
                 </div>
             ) : (
                 
-                    <div className="flex justify-center items-center">
-                    <div className="mt-16 w-4/5 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8 pt-4">    
-                        {all_course}
-                    </div>
+                    <div className="flex mt-12 flex-col justify-center items-center">
+
+                        <div className='flex w-4/5 justify-between'>
+                            <h2 className='text-xl font-bold'>Your courses</h2>
+                            <button  className='rounded-full hover:bg-blue-300' onClick={() => navigate('/create_course')}>New course</button>
+                        </div>
+                        <div className=" w-4/5 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8 pt-2">    
+                            {all_course}
+                        </div>
                     </div>
                 )}
         </>

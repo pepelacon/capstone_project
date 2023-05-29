@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import CourseCard from './CourseCard';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import {FiChevronLeft, FiChevronRight } from 'react-icons/fi'
+
 
 export default function NewestContainer() {
   const navigate = useNavigate();
@@ -51,31 +51,6 @@ export default function NewestContainer() {
     },
   };
 
-  const CustomLeftArrow= ({ onClick, ...rest }) => {
-    const {
-      onMove,
-      carouselState: { currentSlide, deviceType }
-    } = rest;
-    // onMove means if dragging or swiping in progress.
-    return (
-      <button onClick={() => onClick()} className="bg-black text-white rounded-full p-2">
-        <FiChevronLeft size={30} />
-      </button>
-      )
-  };
-
-  const CustomRightArrow = ({ onClick, ...rest }) => {
-    const {
-      onMove,
-      carouselState: { currentSlide, deviceType }
-    } = rest;
-    // onMove means if dragging or swiping in progress.
-    return (
-      <button onClick={() => onClick()} className="bg-black text-white rounded-full p-2">
-        <FiChevronRight size={24} />
-      </button>
-      )
-  };
 
   return (
       <div className="w-4/5  ">
@@ -85,8 +60,7 @@ export default function NewestContainer() {
         <Carousel 
             responsive={responsive}
             infinite={true}
-            // customRightArrow={<CustomRightArrow />}
-            // renderArrowNext={<CustomLeftArrow />}
+        
         >
             {newest_courses}
         </Carousel>

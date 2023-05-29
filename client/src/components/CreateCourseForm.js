@@ -71,7 +71,7 @@ function CreateCourseForm() {
   });
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center my-[60px]">
       <div className="w-102 bg-blue shadow-lg rounded-lg px-8 py-6">
         <h2 className="text-2xl text-blue-900 font-bold mb-4">Create a new course!</h2>
         <form onSubmit={formik.handleSubmit} onReset={formik.handleReset} encType="multipart/form-data">
