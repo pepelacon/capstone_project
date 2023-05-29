@@ -1,8 +1,8 @@
 """new table
 
-Revision ID: 6d7b042b9eca
+Revision ID: 8b55d616c33c
 Revises: 
-Create Date: 2023-05-25 14:05:18.907208
+Create Date: 2023-05-29 10:46:56.394013
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '6d7b042b9eca'
+revision = '8b55d616c33c'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -89,18 +89,16 @@ def upgrade():
     sa.Column('lesson_id', sa.Integer(), nullable=False),
     sa.Column('is_passed', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['enrollment_id'], ['enrollments.id'], ),
-    sa.ForeignKeyConstraint(['lesson_id'], ['lessons.id'], ),
+    sa.ForeignKeyConstraint(['lesson_id'], ['lessons.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('messages',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('sender_id', sa.Integer(), nullable=False),
-    sa.Column('recipient_id', sa.Integer(), nullable=False),
     sa.Column('lesson_id', sa.Integer(), nullable=False),
     sa.Column('content', sa.String(), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
     sa.ForeignKeyConstraint(['lesson_id'], ['lessons.id'], ),
-    sa.ForeignKeyConstraint(['recipient_id'], ['users.id'], ),
     sa.ForeignKeyConstraint(['sender_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )

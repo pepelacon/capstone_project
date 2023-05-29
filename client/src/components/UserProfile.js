@@ -9,9 +9,6 @@ import Settings from './Settings';
 
 
 
-
-
-
 const UserProfile = () => {
     const { userId, setUserId } = useContext(UserContext) 
     const [showSettings, setShowSettings] = useState(false);

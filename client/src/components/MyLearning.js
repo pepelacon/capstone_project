@@ -7,7 +7,7 @@ import { UserContext } from '../UserContext'
 export default function MyLearning () {
     const { userId } = useContext(UserContext) 
     const [allLearning, setAllLearning] = useState([])
-   
+    
     const fetchCourses = async () => {
         const response = await fetch(`/my_learning/${userId.id}`);
         const data = await response.json();

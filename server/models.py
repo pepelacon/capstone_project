@@ -78,7 +78,7 @@ class Course(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    instructor = db.relationship('User', back_populates='courses', cascade="all, delete, delete-orphan", single_parent=True)
+    instructor = db.relationship('User', back_populates='courses', single_parent=True)
     lessons = db.relationship('Lesson', back_populates='course', cascade="all, delete, delete-orphan")
 
     # *********** if course would be deleted, what happening with user

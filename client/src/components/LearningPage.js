@@ -9,6 +9,7 @@ import axios from "axios";
 
 export default function LearningPage() {
   const { userId } = useContext(UserContext);
+  console.log(userId.id);
   const location = useLocation();
   const { course } = location.state;
   const [lessonStates, setLessonStates] = useState({});

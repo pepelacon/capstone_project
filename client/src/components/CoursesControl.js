@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import CourseCard from './CourseCard'
+import EditCards from './EditCards'
 import { UserContext } from '../UserContext'
 import { useNavigate } from 'react-router-dom';
 
@@ -19,7 +19,7 @@ export default function CoursesControl () {
         fetchCourses();
     },[]);
     console.log(allCourses);
-    let all_course = allCourses.map((course) => (<CourseCard key={course.id} {...course}/>))
+    let all_course = allCourses.map((course) => (<EditCards key={course.id} {...course}/>))
     
     return (
         <>

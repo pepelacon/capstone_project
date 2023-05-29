@@ -13,6 +13,7 @@ import { CourseContext } from "./CourseContext";
 import { CourseDetail } from "./components/CourseDetail";
 import CoursesControl from "./components/CoursesControl";
 import Footer from "./components/Footer/Footer";
+import { EditDetail } from "./components/EditDetail";
 
 function App() {
   const [userId, setUserId] = useState(null);
@@ -39,6 +40,8 @@ function App() {
               <Route path="/create_course" element={<CreateCourseForm />} />
               <Route path="/create_lesson" element={<CreateLesson />} />
               <Route path="/detail/:id" element={<CourseDetail />} />
+              <Route path="/edit/:id" element={<EditDetail/>} />
+
               <Route path="/settings" element={<Settings />} />
               <Route path="/my_learning" element={<MyLearning />} />
               <Route path="/instructor_courses" element={<CoursesControl />} />

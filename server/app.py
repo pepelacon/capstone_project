@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 from flask_restful import Api, Resource
 from sqlalchemy.orm import joinedload
 from flask import json
+from sqlalchemy import delete, exists, and_
 import boto3
 
 from models import db, Course, User, Enrollment, Lesson, LessonProgress, Comment, Rating, Message
@@ -176,6 +177,23 @@ class CreateLesson(Resource):
         return make_response(new_lesson.to_dict(), 200)   
 api.add_resource(CreateLesson, '/create_lesson')
 
+class CourseEdit(Resource):
+    def get(self, id):
+        course = Course.query.filter_by(id=id).first()
+        if not course:
+            return make_response({"message": "Course not found"})
+        return make_response(course.to_dict(), 200)   
+    
+    def delete(self, id):
+        course = Course.query.filter_by(id=id).first() 
+        if not course:
+            return make_response({"message": "Course not found"}, 404)
+        db.session.delete(course)
+        db.session.commit() 
+        
+        return make_response({"message": "Course deleted successfully"})      
+api.add_resource(CourseEdit, '/edit/<int:id>')
+
 class CourseById(Resource):
     def get(self, id):
         course = Course.query.filter_by(id=id).first()
@@ -183,6 +201,7 @@ class CourseById(Resource):
             return make_response({"message": "Course not found"})
         return make_response(course.to_dict(), 200)                             
 api.add_resource(CourseById, '/course/<int:id>')
+
 
 
 # $ i am working on
