@@ -1,5 +1,5 @@
 from random import choice as rc, randint
-from models import db, User, Course, Lesson, Comment, Rating, Enrollment
+from models import db, User, Course, Lesson, Comment, Rating, Enrollment, LessonProgress
 from faker import Faker
 from app import app
 
@@ -160,13 +160,13 @@ video_content = [
     'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/7.mov',
     'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/8.mov',
     'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/9.mov',
-    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/11.mov',
-    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/12.mov',
-    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/13.mov',
-    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/14.mov',
-    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/15.mov',
-    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/16.mov',
-    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/17.mov'
+    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/11.mp4',
+    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/12.mp4',
+    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/13.mp4',
+    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/14.mp4',
+    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/15.mp4',
+    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/16.mp4',
+    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/17.mp4'
 ]
 
 
@@ -243,6 +243,7 @@ lesson_titles = [
 with app.app_context():
 
     print('Deleting All Objects...')
+    LessonProgress.query.delete()
     Enrollment.query.delete()
     Rating.query.delete()
     Comment.query.delete()

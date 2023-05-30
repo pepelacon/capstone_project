@@ -174,14 +174,14 @@ export const EditDetail = () => {
         <>
           <div className="container justify-center w-3/4 md:w-1/2 flex flex-col mx-auto my-16 space-y-12 md:space-y-0 md:flex-row">
             <div className="w-full md:w-3/4 items-center justify-center pr-4 md:justify-start md:text-left">
-              <div className="flex items-center justify-between text-md md:text-2xl font-bold">
+              <div className="flex items-center justify-between text-md md:text-xl font-bold">
                 {isEditingTitle ? (
                   <>
                     <input
                       type="text"
                       value={editedTitle}
                       onChange={(e) => setEditedTitle(e.target.value)}
-                      className="border-4 border-blue-300"
+                      className="border-4 border-blue-300 w-full"
                     />
                     <button
                       onClick={handleSaveTitle}

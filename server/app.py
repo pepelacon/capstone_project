@@ -405,7 +405,6 @@ class LessonProgression(Resource):
         data = request.get_json()
         enrollment_id = data["enrollment_id"]
         lessons = Lesson.query.filter_by(course_id=id).all()
-        print(enrollment_id)
         for lesson in lessons:
             lesson_progress = LessonProgress(
                 enrollment_id=enrollment_id,
