@@ -20,7 +20,7 @@ app = Flask(
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:9865458@localhost/capsone_project'
 
-# postgresql://user:9865458@localhost/capstone
+# postgres://capstonedb_itig_user:R4uthwO5OBJ3SQJ1JHvH4sX15qdJyw31@dpg-chr0ui0rddlba9p4mmvg-a.oregon-postgres.render.com/capstonedb_itig
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
