@@ -31,7 +31,7 @@ export const EditDetail = () => {
   const roundedRating = Math.round(courseInfo.average_rating * 2) / 2;
   const roundedRatingToShow = Math.round(courseInfo.average_rating * 10) / 10;
   const enrolledUsers = courseInfo.enrolled_users?.length || 0;
-  console.log(course);
+  console.log(courseInfo);
   let { id: courseId } = useParams();
 
   console.log(courseInfo);

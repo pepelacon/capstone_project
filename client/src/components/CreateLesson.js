@@ -58,9 +58,20 @@ function CreateLesson() {
           .then((response) => response.json())
           .then((data) => {
             setLessons((prev) => [...prev, data]);
-            console.log('Video uploaded:', data);
             resetForm();
-            setVideo(null)
+            setVideo(null);
+
+            const lessonId = data.id;
+            fetch(`/lesson_progression_add/${course.id}/${lessonId}`, {
+              method: 'POST',
+            })
+              .then((response) => response.json())
+              .then((lessonProgress) => {
+                console.log('Lesson progress created:', lessonProgress);
+              })
+              .catch((error) => {
+                console.error('Error creating lesson progress:', error);
+              });
           })
           .catch((error) => {
             console.error('Error uploading video:', error);

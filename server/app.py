@@ -375,6 +375,22 @@ class AllInstructorCourses(Resource):
         return make_response(all_courses, 200)
 api.add_resource(AllInstructorCourses, '/my_courses/<int:id>')
 
+class LessonProgressionCreateNew(Resource):
+    def post(self, lessonId, courseId):
+        enrollments = Enrollment.query.filter_by(course_id=courseId).all()
+        for enrollment in enrollments:
+            lesson_progress = LessonProgress(
+                enrollment_id=enrollment.id,
+                lesson_id=lessonId,
+                is_passed=False
+            )
+            db.session.add(lesson_progress)
+
+        db.session.commit()
+        return make_response({"message": "LessonProgress was updated successfully"}, 201)
+api.add_resource(LessonProgressionCreateNew, '/lesson_progression_add/<int:courseId>/<int:lessonId>')
+
+
 class LessonProgression(Resource):
     def get(self, userId, id):
         enrollment = Enrollment.query.filter_by(user_id=userId, course_id=id).first()
