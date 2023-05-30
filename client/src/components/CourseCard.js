@@ -1,17 +1,14 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import Rating from '@mui/material/Rating';
 import { useNavigate } from 'react-router-dom';
 
 
-
-
 export default function CourseCard (course) {
     const navigate = useNavigate()
-    const { id, title, picture, average_rating, comments, instructor, category } = course
+    const { id, title, picture, average_rating, instructor, category } = course
     const roundedRating = Math.round(average_rating * 2) / 2
     const roundedRatingToShow = (Math.round(average_rating * 10) / 10);
-
-
+  
     return (  
         <div className="max-w-sm rounded-sm overflow-hidden" onClick={() => navigate(`/detail/${id}`)}>
             <img className="w-full h-36 object-cover" src={picture} alt={title} />

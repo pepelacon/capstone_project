@@ -14,6 +14,7 @@ export const CourseDetail = () => {
   const roundedRating = Math.round(courseInfo.average_rating * 2) / 2;
   const roundedRatingToShow = Math.round(courseInfo.average_rating * 10) / 10;
   const enrolledUsers = courseInfo.enrolled_users?.length || 0
+  const [isAuthor, setIsAuthor] = useState(false);
 
   let { id: courseId } = useParams();
 
@@ -30,6 +31,7 @@ export const CourseDetail = () => {
         if (enrolled.length !== 0) {
           setIsEnrolled(true);
         }
+        setIsAuthor(courseData.instructor.id === userId.id);
       } catch (error) {
         console.error(error);
       }
@@ -157,7 +159,7 @@ export const CourseDetail = () => {
               <img
                 src={courseInfo.picture}
                 alt="Course"
-                className="h-[250px] aspect-w-1 mx-auto"
+                className="object-cover object-center h-[200px] mx-auto"
               />
               <p className="text-center text-darkGrayishBlue md:text-left">
                 Author: {courseInfo.instructor.name}
@@ -166,6 +168,10 @@ export const CourseDetail = () => {
               {!userId ? (
                 <button id="single-card-button" size="medium" disabled>
                   You need to register to apply
+                </button>
+              ) : isAuthor ? (
+                <button disabled>
+                  You are the author
                 </button>
               ) : !isEnrolled ? (
                 <button
