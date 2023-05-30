@@ -7,6 +7,7 @@ from sqlalchemy.orm import joinedload
 from flask import json
 from sqlalchemy import delete, exists, and_
 import boto3
+import os
 
 from models import db, Course, User, Enrollment, Lesson, LessonProgress, Comment, Rating, Message
 
@@ -18,8 +19,8 @@ app = Flask(
     template_folder='../client/build'
     )
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:9865458@localhost/capsone_project'
-
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+# 'postgresql://user:9865458@localhost/capsone_project'
 # postgres://capstonedb_itig_user:R4uthwO5OBJ3SQJ1JHvH4sX15qdJyw31@dpg-chr0ui0rddlba9p4mmvg-a.oregon-postgres.render.com/capstonedb_itig
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
