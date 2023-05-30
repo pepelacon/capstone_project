@@ -159,7 +159,14 @@ video_content = [
     'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/6.mov',
     'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/7.mov',
     'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/8.mov',
-    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/9.mov'
+    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/9.mov',
+    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/11.mov',
+    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/12.mov',
+    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/13.mov',
+    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/14.mov',
+    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/15.mov',
+    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/16.mov',
+    'https://daniel-storage-video.s3.us-east-2.amazonaws.com/video+courses/17.mov'
 ]
 
 
@@ -252,7 +259,7 @@ with app.app_context():
     users = []
     courses = []
 
-    for i in range(10):
+    for i in range(100):
         user = User(
             email=fake.email(),
             name=fake.name(),
@@ -269,7 +276,7 @@ with app.app_context():
 
     print('Making 20 courses')
 
-    for i in range(20):
+    for i in range(100):
         course = Course(
             title=rc(course_titles),
             category=rc(category),

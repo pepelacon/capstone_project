@@ -38,7 +38,7 @@ export default function AllContainer ({ query, filter }) {
   let filteredItems = filter === "All" ? sortedCourses : sortedCourses.filter((el) => el.category === filter);
 
   let all_course = filteredItems
-    // .filter((course) => userId !== null && course.instructor_id !== userId.id)
+
     .filter((course) => course.title.toLowerCase().includes(query.toLowerCase()))
     .map((course) => (<CourseCard key={course.id} {...course}/>));
 
@@ -50,7 +50,7 @@ export default function AllContainer ({ query, filter }) {
                 <h2 className='text-black font-bold md:text-2xl pt-4 pl-4 '>Best courses</h2>
                 <h2 className='text-black  md:text-xl pl-4 pb-2'>All list of courses</h2>
             </div>
-            <div className="flex place-items-end">
+            <div className="flex place-items-end mb-2">
                 <p className='mr-2 text-xl'>Sort by rating:</p>
             <button onClick={handleSort} className=" hover:bg-blue-300 font-bold text-sm rounded-full">
             {isAscending ? <HiArrowSmUp/> : <HiArrowSmDown/>}

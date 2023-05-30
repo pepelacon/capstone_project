@@ -142,7 +142,7 @@ export const CourseDetail = () => {
                       <img
                         src={comment.user.avatar}
                         alt={comment.user.nickname}
-                        className="w-16 h-16 mr-2 rounded-full"
+                        className="w-16 h-16 object-cover mr-2 rounded-full"
                       />
                       <div>
                         <div className="text-base font-bold">

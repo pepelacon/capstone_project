@@ -1,36 +1,33 @@
-import React, { useContext, useState } from 'react';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
-import { CourseContext } from '../CourseContext';
-import { useDropzone } from 'react-dropzone';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from "react";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { CourseContext } from "../CourseContext";
+import { useDropzone } from "react-dropzone";
+import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 
-
-
 const validationSchema = yup.object().shape({
-  title: yup.string().required('Title is required'),
-  description: yup.string().required('Description is required'),
+  title: yup.string().required("Title is required"),
+  description: yup.string().required("Description is required"),
   video: yup
     .mixed()
-    .test('fileType', 'Invalid file format', (value) => {
+    .test("fileType", "Invalid file format", (value) => {
       if (value) {
-        const supportedFormats = ['video/mp4', 'video/mpeg', 'video/quicktime'];
+        const supportedFormats = ["video/mp4", "video/mpeg", "video/quicktime"];
         return supportedFormats.includes(value.type);
       }
       return true;
     })
-    .required('Video is required'),
+    .required("Video is required"),
 });
 
 function CreateLesson() {
   const { course } = useContext(CourseContext);
   const [video, setVideo] = useState(null);
-  const [lesson, setLessons] = useState(course.lessons)
+  const [lesson, setLessons] = useState(course.lessons);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  
   const handleVideoChange = (event) => {
     const selectedVideo = event.target.files[0];
     setVideo(selectedVideo);
@@ -38,22 +35,22 @@ function CreateLesson() {
 
   const formik = useFormik({
     initialValues: {
-      title: '',
-      description: '',
-      video: '',
+      title: "",
+      description: "",
+      video: "",
     },
     validationSchema,
     onSubmit: (values, { resetForm }) => {
       if (values.video) {
-        setIsLoading(true)
+        setIsLoading(true);
         const formData = new FormData();
-        formData.append('video', values.video);
-        formData.append('course_id', course.id);
-        formData.append('description', values.description);
-        formData.append('title', values.title);
+        formData.append("video", values.video);
+        formData.append("course_id", course.id);
+        formData.append("description", values.description);
+        formData.append("title", values.title);
 
-        fetch('/create_lesson', {
-          method: 'POST',
+        fetch("/create_lesson", {
+          method: "POST",
           body: formData,
         })
           .then((response) => response.json())
@@ -65,18 +62,18 @@ function CreateLesson() {
 
             const lessonId = data.id;
             fetch(`/lesson_progression_add/${course.id}/${lessonId}`, {
-              method: 'POST',
+              method: "POST",
             })
               .then((response) => response.json())
               .then((lessonProgress) => {
-                console.log('Lesson progress created:', lessonProgress);
+                console.log("Lesson progress created:", lessonProgress);
               })
               .catch((error) => {
-                console.error('Error creating lesson progress:', error);
+                console.error("Error creating lesson progress:", error);
               });
           })
           .catch((error) => {
-            console.error('Error uploading video:', error);
+            console.error("Error uploading video:", error);
           });
       }
     },
@@ -84,62 +81,72 @@ function CreateLesson() {
 
   const handleVideoDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
-    formik.setFieldValue('video', file);
+    formik.setFieldValue("video", file);
     setVideo(file);
-    
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: handleVideoDrop,
-    accept: 'video/*',
+    accept: "video/*",
     multiple: false,
   });
 
   const handleFinish = () => {
-    setLessons([])
-    navigate('/instructor_courses')
-  }
+    setLessons([]);
+    navigate("/instructor_courses");
+  };
 
   return (
-    <div className="flex items-center justify-center py-16"> 
-      <div className='flex flex-col'>
+    <div className="flex items-center justify-center py-16">
+      <div className="flex flex-col">
         <div>
-          <h2 className='text-2xl font-bold'>Course: {course.title}</h2>
+          <h2 className="text-2xl font-bold">Course: {course.title}</h2>
         </div>
 
         <div className="w-102 bg-blue shadow-lg rounded-lg px-8 py-6">
-          <h2 className="text-xl text-blue-900 font-bold mb-4">Create lesson number {lesson.length + 1}</h2>
+          <h2 className="text-xl text-blue-900 font-bold mb-4">
+            Create lesson number {lesson.length + 1}
+          </h2>
           <form onSubmit={formik.handleSubmit}>
-          {isLoading ? (
-            <div className="flex items-center justify-center mx-32">
-              <CircularProgress size={30}/>
-            </div>
-          ) : (
-            <div
-              {...getRootProps()}
-              className={`w-full px-3 py-2 border mb-2 flex justify-center rounded focus:outline-none focus:border-blue-500 ${
-                formik.errors.video && formik.touched.video ? 'border-red-500' : 'border-blue-300'
-              } ${isDragActive ? 'border-blue-500' : ''}`}
-            >
-              <input {...getInputProps()} />
-              {video ? (
-                <video controls style={{ maxWidth: '406px', maxHeight: '100%' }}>
-                  <source src={URL.createObjectURL(video)} type={video.type}/>
-                </video>
-              ) : isDragActive ? (
-                <p>Drop the video file here...</p>
-              ) : (
-                <p>Drag and drop a video file here, or click to select a video</p>
-              )}
-            </div>
-          )}
-
+            {isLoading ? (
+              <div className="flex items-center justify-center mx-32">
+                <CircularProgress size={30} />
+              </div>
+            ) : (
+              <div
+                {...getRootProps()}
+                className={`w-full px-3 py-2 border mb-2 flex justify-center rounded focus:outline-none focus:border-blue-500 ${
+                  formik.errors.video && formik.touched.video
+                    ? "border-red-500"
+                    : "border-blue-300"
+                } ${isDragActive ? "border-blue-500" : ""}`}
+              >
+                <input {...getInputProps()} />
+                {video ? (
+                  <video
+                    controls
+                    style={{ maxWidth: "406px", maxHeight: "100%" }}
+                  >
+                    <source
+                      src={URL.createObjectURL(video)}
+                      type={video.type}
+                    />
+                  </video>
+                ) : isDragActive ? (
+                  <p>Drop the video file here...</p>
+                ) : (
+                  <p>
+                    Drag and drop a video file here, or click to select a video
+                  </p>
+                )}
+              </div>
+            )}
 
             {formik.errors.video && formik.touched.video && (
               <div className="text-red-500">{formik.errors.video}</div>
             )}
             <h4>Title:</h4>
-            
+
             <input
               type="text"
               name="title"
@@ -162,21 +169,25 @@ function CreateLesson() {
             {formik.errors.description && formik.touched.description && (
               <div className="text-red-500">{formik.errors.description}</div>
             )}
-            <div className='flex justify-between'>
-              
-              <button className="rounded-full hover:bg-blue-300" type="submit" disabled={!formik.isValid || formik.isSubmitting}>
+            <div className="flex justify-between">
+              <button
+                className="rounded-full hover:bg-blue-300"
+                type="submit"
+                disabled={!formik.isValid || formik.isSubmitting}
+              >
                 Upload
               </button>
-              { lesson.length > 0 ?
-
-                <button className="rounded-full hover:bg-blue-300" type="submit" onClick={handleFinish}>
+              {lesson.length > 0 ? (
+                <button
+                  className="rounded-full hover:bg-blue-300"
+                  type="submit"
+                  onClick={handleFinish}
+                >
                   Finish
-                </button> :
-                <h2>
-                  You need to add at least one lesson
-                </h2>
-
-              }
+                </button>
+              ) : (
+                <h2>You need to add at least one lesson</h2>
+              )}
             </div>
           </form>
         </div>
@@ -186,5 +197,3 @@ function CreateLesson() {
 }
 
 export default CreateLesson;
-
-

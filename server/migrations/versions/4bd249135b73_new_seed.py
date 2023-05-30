@@ -1,8 +1,8 @@
-"""new table
+"""new seed
 
-Revision ID: 8b55d616c33c
+Revision ID: 4bd249135b73
 Revises: 
-Create Date: 2023-05-29 10:46:56.394013
+Create Date: 2023-05-30 10:19:28.793355
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '8b55d616c33c'
+revision = '4bd249135b73'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -89,7 +89,7 @@ def upgrade():
     sa.Column('lesson_id', sa.Integer(), nullable=False),
     sa.Column('is_passed', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['enrollment_id'], ['enrollments.id'], ),
-    sa.ForeignKeyConstraint(['lesson_id'], ['lessons.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['lesson_id'], ['lessons.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('messages',
