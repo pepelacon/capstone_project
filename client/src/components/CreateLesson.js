@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { CourseContext } from '../CourseContext';
 import { useDropzone } from 'react-dropzone';
 import { useNavigate } from 'react-router-dom';
+import CircularProgress from "@mui/material/CircularProgress";
 
 
 
@@ -26,11 +27,10 @@ function CreateLesson() {
   const { course } = useContext(CourseContext);
   const [video, setVideo] = useState(null);
   const [lesson, setLessons] = useState(course.lessons)
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate()
 
-  console.log(course);
-
-  console.log(lesson);
+  
   const handleVideoChange = (event) => {
     const selectedVideo = event.target.files[0];
     setVideo(selectedVideo);
@@ -45,6 +45,7 @@ function CreateLesson() {
     validationSchema,
     onSubmit: (values, { resetForm }) => {
       if (values.video) {
+        setIsLoading(true)
         const formData = new FormData();
         formData.append('video', values.video);
         formData.append('course_id', course.id);
@@ -57,6 +58,7 @@ function CreateLesson() {
         })
           .then((response) => response.json())
           .then((data) => {
+            setIsLoading(false);
             setLessons((prev) => [...prev, data]);
             resetForm();
             setVideo(null);
@@ -108,7 +110,12 @@ function CreateLesson() {
         <div className="w-102 bg-blue shadow-lg rounded-lg px-8 py-6">
           <h2 className="text-xl text-blue-900 font-bold mb-4">Create lesson number {lesson.length + 1}</h2>
           <form onSubmit={formik.handleSubmit}>
-          <div
+          {isLoading ? (
+            <div className="flex items-center justify-center mx-32">
+              <CircularProgress size={30}/>
+            </div>
+          ) : (
+            <div
               {...getRootProps()}
               className={`w-full px-3 py-2 border mb-2 flex justify-center rounded focus:outline-none focus:border-blue-500 ${
                 formik.errors.video && formik.touched.video ? 'border-red-500' : 'border-blue-300'
@@ -125,10 +132,14 @@ function CreateLesson() {
                 <p>Drag and drop a video file here, or click to select a video</p>
               )}
             </div>
+          )}
+
+
             {formik.errors.video && formik.touched.video && (
               <div className="text-red-500">{formik.errors.video}</div>
             )}
             <h4>Title:</h4>
+            
             <input
               type="text"
               name="title"
