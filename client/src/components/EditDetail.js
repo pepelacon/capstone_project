@@ -22,9 +22,11 @@ export const EditDetail = () => {
   const [editedTitle, setEditedTitle] = useState("");
   const [editedProfilePicture, setEditedProfilePicture] = useState("");
   const [previewImage, setPreviewImage] = useState("");
-  const [deletedLessonId, setDeletedLessonId] = useState(null);
+  const [lessons, setLessons] = useState(null);
 
   const navigate = useNavigate();
+
+  
 
   const roundedRating = Math.round(courseInfo.average_rating * 2) / 2;
   const roundedRatingToShow = Math.round(courseInfo.average_rating * 10) / 10;
@@ -42,6 +44,7 @@ export const EditDetail = () => {
       const response = await fetch(`/edit/${id}`);
       const data = await response.json();
       setCourseInfo(data);
+      setLessons(data.lessons);
       setCourse(data);
     } catch (error) {
       console.error("Error fetching course details:", error);
@@ -151,12 +154,12 @@ export const EditDetail = () => {
   };
 
   const deleteLesson = (lessonId) => {
-    console.log(lessonId);
     axios
       .delete(`/lesson/${lessonId}`)
       .then((response) => {
         console.log("lesson deleted:", response.data);
-        setDeletedLessonId(lessonId);
+        const updatedLessons = lessons.filter((lesson) => lesson.id !== lessonId);
+        setLessons(updatedLessons);
       })
       .catch((error) => {
         console.error("Error deleting:", error);
@@ -269,9 +272,9 @@ export const EditDetail = () => {
                   </button>
                 </div>
                 <ul className="text-sm md:text-lg text-center md:text-left text-darkGrayishBlue w-full">
-                  {courseInfo.lessons.map(
+                  {lessons.map(
                     (lesson) =>
-                      lesson.id !== deletedLessonId && (
+
                         <li
                           key={lesson.id}
                           className="flex text-base items-center space-x-2"
@@ -302,7 +305,6 @@ export const EditDetail = () => {
                             </div>
                           </div>
                         </li>
-                      )
                   )}
                 </ul>
               </div>
