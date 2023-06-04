@@ -5,6 +5,7 @@ import Divider from "@mui/material/Divider";
 import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined";
 import CheckBoxOutlinedIcon from "@mui/icons-material/CheckBoxOutlined";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 
 export default function LearningPage() {
@@ -15,7 +16,7 @@ export default function LearningPage() {
   const [lessonStates, setLessonStates] = useState({});
   const [selectedLesson, setSelectedLesson] = useState(course.lessons[0]);
   const [chatMessages, setChatMessages] = useState([]);
-
+  const navigate = useNavigate();
   console.log(chatMessages);
 
   useEffect(() => {
@@ -136,9 +137,14 @@ export default function LearningPage() {
 
         <div className="w-3/4 flex flex-col justify-center items-center mt-4">
           {selectedLesson ? (
-            <>
-              <h2 className="text-xl font-bold mb-2">{selectedLesson.title}</h2>
-              <div className="h-[520px] flex justify-center items-center ">
+        
+            <div>
+              <div className="flex justify-between">
+                <button className="flex justify-start rounded-full ml-2 hover:bg-blue-300" onClick={() => navigate("/my_learning")}>back</button>
+                <h2 className="text-xl font-bold mb-2 flex justify-center items-center my-auto">{selectedLesson.title}</h2>
+                <button className="text-white border-none">back</button>
+              </div>
+              <div className="h-[520px] flex justify-center items-center mt-2">
                 <video
                   key={selectedLesson.id}
                   controls
@@ -151,7 +157,9 @@ export default function LearningPage() {
               <p className="max-w-[1024px] mt-4">
                 {selectedLesson.description}
               </p>
-            </>
+
+            </div>
+            
           ) : (
             <p>Select a lesson from the sidebar to view its content.</p>
           )}

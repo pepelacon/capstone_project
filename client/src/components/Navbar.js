@@ -90,7 +90,6 @@ function NavBar({ userId, setQuery }) {
             </>
           ) : (
             <a href="#">
-              {" "}
               <SignUp />
             </a>
           )}

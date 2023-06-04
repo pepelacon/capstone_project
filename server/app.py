@@ -19,7 +19,7 @@ app = Flask(
     template_folder='../client/build'
     )
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://capstonedb_itig_user:R4uthwO5OBJ3SQJ1JHvH4sX15qdJyw31@dpg-chr0ui0rddlba9p4mmvg-a.oregon-postgres.render.com/capstonedb_itig'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:9865458@localhost/capsone_project'
 # os.environ.get('DATABASE_URL')
 # 'postgresql://user:9865458@localhost/capsone_project'
 # postgres://capstonedb_itig_user:R4uthwO5OBJ3SQJ1JHvH4sX15qdJyw31@dpg-chr0ui0rddlba9p4mmvg-a.oregon-postgres.render.com/capstonedb_itig
@@ -480,4 +480,4 @@ api.add_resource(Messages, '/lesson/<int:id>/messages')
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=5555, debug=True)
